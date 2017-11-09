@@ -1,0 +1,57 @@
+//多行文字溢出显示...
+// 参数为最多显示行数
+@mixin ellipsis ($clamp: 3) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $clamp;
+    -webkit-box-orient: vertical;
+}
+//设置input和textarea占位文字placeholder的样式
+// 参数说明
+// $color    文字颜色
+// $font     字体大小
+@mixin placeholder ($color: #666, $font: 14px) {
+    &::-webkit-input-placeholder {
+        color: $color;
+        font-size: $font;
+    }
+    &:-moz-placeholder {
+        color: $color;
+        font-size: $font;
+    }
+    &::-moz-placeholder {
+        color: $color;
+        font-size: $font;
+    }
+    &:-ms-input-placeholder {
+        color: $color;
+        font-size: $font;
+    }
+}
+//滚动条
+// 参数说明
+// $width    滚动条宽度
+// $color    滚动条颜色
+// $bg    滚动条滑道颜色
+@mixin scrollbar ($width: 10px, $color: #009af3, $bg: #f1f1f1) {
+    &::-webkit-scrollbar {
+        width: $width;
+        height: $width;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: $color;
+        border-radius: $width/2;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: $bg;
+        border-radius: $width/2;
+    }
+    &::-webkit-scrollbar-track-piece {
+        background-color: $bg;
+        border-radius: $width/2;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: darken($color, 10%);
+    }
+}

@@ -1,0 +1,234 @@
+@import './mk.scss';
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Microsoft YaHei";
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+}
+body {
+    background-color: #f1f1f1;
+}
+ html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+@for $i from 1 through 10 {
+    $location: (ml: margin-left, mt: margin-top, mr: margin-right, mb: margin-bottom, mg: margin, pl: padding-left, pt: padding-top, pr: padding-right, pb: padding-bottom, pd: padding);
+    @each $a,
+    $b in $location {
+        .#{$a}#{5 * $i} {
+            #{$b}: 5px * $i!important;
+        }
+    }
+}
+@for $i from 6 through 18 {
+    .f#{2 * $i} {
+        font-size: 2px * $i!important;
+    }
+}
+h1,h2,h3 {
+    font-size: 15px;
+}
+h4 {
+    font-size: 14px;
+}
+h5 {
+    font-size: 13px;
+}
+h6 {
+    font-size: 12px;
+}
+a {
+    color: inherit;
+}
+li {
+    list-style: none;
+}
+button {
+    background-color: transparent;
+    border: 1px solid #e5e5e5;
+    text-align: center;
+}
+.clear {
+    clear: both;
+}
+.clearfix:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.content img {
+    max-width: 100%;
+}
+.tal {
+    text-align: left!important;
+}
+.tac {
+    text-align: center!important;
+}
+.tar {
+    text-align: right!important;
+}
+.vat {
+    vertical-align: top!important;
+}
+.vam {
+    vertical-align: middle!important;
+}
+.vab {
+    vertical-align: bottom!important;
+}
+.block {
+    display: block!important;
+}
+.iblock {
+    display: inline-block!important;
+}
+.posr {
+    position: relative!important;
+}
+.posa {
+    position: absolute!important;
+}
+.posf {
+    position: fixed!important;
+}
+.bf {
+    background-color: #fff;
+}
+.interval {
+    height: 10px;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #f1f1f1;
+}
+.center {
+    width: 92%;
+    margin: 0 auto;
+}
+.center_box {
+    padding-left: 4%;
+    padding-right: 4%;
+}
+.center_box_full {
+    width: 92%!important;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+.margin_center_box {
+    margin-left: calc(-4%/0.92);
+    margin-right: calc(-4%/0.92);
+}
+/* transition */
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+/* transition */
+.cover {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+.zz_list {
+    li,.zz_list_item {
+        width: 92%;
+        padding: 15px 4%;
+        border-bottom: 1px solid #f1f1f1;
+        display: flex;
+    }
+    .zz_list_img {
+        width: 98px;
+        height: 52px;
+    }
+    .zz_list_tit {
+        position: relative;
+        line-height: 1;
+        h2 {
+            margin-top: -2px;
+            padding-right: 39px;
+            line-height: 16px;
+        }
+        span {
+            position: absolute;
+            right: -4px;
+            top: -2px;
+            margin-left: 10px;
+            border-radius: 2px;
+            width: 35px;
+            height: 18px;
+            text-align: center;
+            line-height: 18px;
+            color: $color;
+            border: 1px solid $color;
+            font-size: 12px;
+        }
+    }
+    .zz_list_type {
+        span {
+            font-size: 13px;
+            padding: .5px 6.5px;
+            display: inline-block;
+            margin-right: 10px;
+            border: 1px solid #ff5a00;
+            color: #ff5a00;
+        }
+        .type_conduct {
+            border: 1px solid $color;
+            color: $color;
+        }
+        .type_end {
+            border: 1px solid #b2b2b2;
+            color: #b2b2b2;
+        }
+    }
+    .zz_list_con,.zz_list_progress,.zz_list_info {
+        margin-top: 10px;
+    }
+    .zz_list_l {
+    }
+    .zz_list_r {
+        flex: 1;
+        padding-left: 9px;
+    }
+    .zz_list_con {
+        display: flex;
+        color: #6d6d6d;
+        .color_number {
+            color: $color;
+        }
+    }
+    .zz_list_info {
+        display: flex;
+        justify-content: space-between;
+        color: #6d6d6d;
+        font-size: 14px;
+        line-height: 1;
+        .color_number {
+            color: #fe0000;
+        }
+    }
+    .weui-progress__bar {
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        .weui-progress__inner-bar {
+            transition: all .3s;
+            width: 0;
+        }
+    }
+}
