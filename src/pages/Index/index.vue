@@ -54,7 +54,4 @@
 
 <style lang="scss" scoped>
     @import '~css/mk.scss';
-    .interval {
-        height: 8px;
-    }
 </style>

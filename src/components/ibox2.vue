@@ -2,7 +2,7 @@
     <div class="ibox2 bf">
         <flexbox :gutter="0" wrap="wrap" justify="space-around">
             <flexbox-item :span="1/2">
-                <router-link to="/foo">
+                <router-link to="/apply/2">
                     <div class="ibox2_item">
                         <span>申请轮椅入口</span>
                         <img src="~img/ibox2_1.png" width="32.5" height="32.5" alt="">
@@ -10,7 +10,7 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/2">
-                <router-link to="/foo">
+                <router-link to="/apply/1">
                     <div class="ibox2_item">
                         <span>申请拐杖入口</span>
                         <img src="~img/ibox2_2.png" width="40" height="33" alt="">
@@ -18,7 +18,7 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/2">
-                <router-link to="/foo">
+                <router-link to="/donation">
                     <div class="ibox2_item">
                         <span>捐赠闲置轮椅</span>
                         <img src="~img/ibox2_3.png" width="38" height="33" alt="">
@@ -26,7 +26,7 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/2">
-                <router-link to="/foo">
+                <router-link to="/">
                     <div class="ibox2_item">
                         <span>资助轮椅项目</span>
                         <img src="~img/ibox2_4.png" width="31.5" height="33.5" alt="">

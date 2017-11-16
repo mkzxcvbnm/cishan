@@ -1,14 +1,13 @@
 <template>
     <div class="notice center_box bf">
         <swiper loop auto height="50px" direction="vertical" :interval=2000 :show-dots="false">
-            <swiper-item v-for="(item, index) in data['notice']" :key="index">
-                <p class="ellipsis"><span>通知</span>{{ item.title }}</p>
+            <swiper-item v-for="(item, index) in list" :key="index">
+                <router-link to="/news/1"><p class="ellipsis"><span>通知</span>{{ item.title }}</p></router-link>
             </swiper-item>
         </swiper>
     </div>
 </template>
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Swiper, SwiperItem } from 'vux'
     export default {
         name: 'notice',
@@ -18,28 +17,22 @@
         },
         data() {
             return {
+                list: []
             }
         },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
-        },
         created() {
-            this.post('http://www.yunucms.cn/index.php/api/list', {
-                limit: 5
+            this.get('http://jiujiu99.yuanhang.org/api/index/Article', {
+                limit: 10,
+                classify: 1,
+                page: 1,
+                order: 1
             }).then(res => {
-                this.Data({notice: res.data.data})
+                this.$set(this, 'list', res.data.data)
             })
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     @import '~css/mk.scss';
     .notice {
         line-height: 50px;

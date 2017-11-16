@@ -1,6 +1,6 @@
 <template>
     <div class="banner">
-        <swiper loop auto dots-position="center" height="200px" :show-desc-mask="false" :list="data['banner']"></swiper>
+        <swiper loop auto dots-position="center" height="200px" :show-desc-mask="false" :list="list"></swiper>
     </div>
 </template>
 <script>
@@ -13,6 +13,9 @@
         },
         data() {
             return {
+                list: [{
+                    img: require('img/banner.jpg')
+                }]
             }
         },
         computed: {
@@ -26,11 +29,11 @@
             ])
         },
         created() {
-            this.post('http://www.yunucms.cn/index.php/api/banner').then(res => {
-                let data = res.data.data.map((item, index) => ({
-                    img: item.pic
+            this.get('http://jiujiu99.yuanhang.org/api/index/Slide').then(res => {
+                let info = res.data.data.map((item, index) => ({
+                    img: item.image
                 }))
-                this.Data({banner: data})
+                this.$set(this, 'list', info)
             })
         }
     }

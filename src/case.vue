@@ -1,12 +1,12 @@
 <template>
-    <div class="demo">
+    <div class="case">
     </div>
 </template>
 
 <script>
     import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
     export default {
-        name: 'demo',
+        name: 'case',
         props: [],
         components: {
         },

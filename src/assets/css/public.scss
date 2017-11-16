@@ -54,6 +54,9 @@ button {
     border: 1px solid #e5e5e5;
     text-align: center;
 }
+.color {
+    color: $color;
+}
 .clear {
     clear: both;
 }
@@ -109,7 +112,7 @@ button {
     background-color: #fff;
 }
 .interval {
-    height: 10px;
+    height: 8px;
     border-top: 1px solid #e5e5e5;
     border-bottom: 1px solid #e5e5e5;
     background-color: #f1f1f1;
@@ -133,10 +136,67 @@ button {
 }
 /* transition */
 .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+    transition: opacity .3s;
 }
 .fade-enter, .fade-leave-to {
     opacity: 0;
+}
+.fade-leave-active {
+    display: none;
+}
+.header-fade-in-right-enter-active {
+    animation: headerIn .5s;
+}
+.header-fade-in-left-enter-active {
+    animation: headerOut .5s;
+}
+@keyframes headerIn {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+@keyframes headerOut {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.translateX-out-enter-active,
+.translateX-out-leave-active,
+.translateX-in-enter-active,
+.translateX-in-leave-active {
+    will-change: transform;
+    transition: all .5s;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    perspective: 1000;
+}
+.translateX-out-enter {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+}
+.translateX-out-leave-active {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+}
+.translateX-in-enter {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+}
+.translateX-in-leave-active {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
 }
 /* transition */
 .cover {
@@ -144,7 +204,50 @@ button {
     background-position: center;
     background-size: cover;
 }
+.top_pic {
+    width: 100%;
+    display: block;
+}
+.input_money {
+    .weui-cell__ft {
+        &:before {
+            content: '元';
+            color: #000;
+            font-size: 15px;
+        }
+    }
+}
+.border_t {
+    border-top: 1px solid #e5e5e5;
+}
+.border_b {
+    border-bottom: 1px solid #e5e5e5;
+}
+.between {
+    display: flex;
+    justify-content: space-between;
+}
+.no_bg_check {
+    position: relative;
+    .weui-cells {
+        background: transparent;
+        &:before,&:after {
+            display: none;
+        }
+    }
+    .check_btn {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #3f51b5;
+    }
+    [class^="weui-icon-"]:before, [class*=" weui-icon-"]:before {
+        margin-left: 0;
+    }
+}
 .zz_list {
+    background-color: #fff;
     li,.zz_list_item {
         width: 92%;
         padding: 15px 4%;
@@ -225,6 +328,89 @@ button {
     .weui-progress__bar {
         height: 10px;
         border-radius: 5px;
+        overflow: hidden;
+        .weui-progress__inner-bar {
+            transition: all .3s;
+            width: 0;
+        }
+    }
+}
+.pbox3_list {
+    .weui-form-preview:before,.weui-form-preview:after,.weui-form-preview__btn:after {
+        display: none;
+    }
+    .weui-form-preview__hd:after {
+        left: 0;
+    }
+    .weui-form-preview__hd:after,.weui-form-preview__ft:after {
+        border-color: #e5e5e5;
+    }
+    .weui-form-preview__hd {
+        padding: 5px 15px;
+        overflow: hidden;
+        .weui-form-preview__label,.weui-form-preview__value {
+            color: $color;
+            font-size: 14px;
+        }
+    }
+    .weui-form-preview__bd {
+        text-align: left;
+        font-size: 14px;
+        &,.weui-form-preview__label {
+            min-width: 5em;
+            color: #6d6d6d;
+            margin-right: 2px;
+        }
+    }
+    .weui-form-preview__ft {
+        span {
+            width: 93.5px;
+            height: 31.5px;
+            display: inline-block;
+            text-align: center;
+            line-height: 31.5px;
+            color: #2e2e2e;
+            border: 1px solid #e5e5e5;
+            border-radius: 5px;
+        }
+        .weui-form-preview__btn_primary {
+            span {
+                width: auto;
+                padding: 0 25px;
+                border-color: $color;
+                color: #fff;
+                background-color: $color;
+            }
+        }
+    }
+}
+body {
+    .weui-input, .weui-textarea {
+        @include placeholder(#a3a3a3, 15px)
+    }
+    .group_interval .weui-cells {
+        margin-top: 0;
+        &:before,&:after {
+            display: none;
+        }
+    }
+    .weui-cell {
+        font-size: 15px;
+        line-height: 28px;
+        &:before {
+            left: 0;
+        }
+    }
+    .weui-cells {
+        margin-top: 8px;
+        font-size: 15px;
+        &:before,&:after {
+            border-color: #e5e5e5;
+        }
+    }
+    .weui-progress__bar {
+        height: 9px;
+        border-radius: 4.5px;
         overflow: hidden;
         .weui-progress__inner-bar {
             transition: all .3s;

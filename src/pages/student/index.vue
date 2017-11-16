@@ -1,7 +1,7 @@
 <template>
     <div class="student bf">
         <div class="interval"></div>
-        <div class="content pd15" v-html="sdata.content"></div>
+        <div class="content pd15" v-html="sdata.depict"></div>
     </div>
 </template>
 
@@ -26,14 +26,12 @@
         },
         methods: {
             ...mapActions([
-                'Data',
-                'PushData'
+                'Data'
             ])
         },
         created() {
-            this.post('http://www.yunucms.cn/index.php/api/content', {id: this.id}).then(res => {
+            this.get('http://jiujiu99.yuanhang.org/api/index/StudentShow', {id: this.id}).then(res => {
                 let info = res.data.data
-                this.Data({['student_' + this.id]: info, title: info.title})
                 this.$set(this, 'sdata', info)
             })
         }

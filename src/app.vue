@@ -1,12 +1,19 @@
 <template>
     <div id="app">
-        <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="80px">
+        <view-box class="oh" ref="viewBox" body-padding-top="46px" body-padding-bottom="80px">
             <mk-header></mk-header>
-            <transition name="fade" mode="out-in" appear>
-                <!-- <keep-alive> -->
-                    <router-view></router-view>
-                <!-- </keep-alive> -->
+            <transition
+            @after-enter="afterEnter"
+            :name="'translateX-' + (isback ? 'out' : 'in')"
+            appear
+            >
+                <router-view></router-view>
             </transition>
+            <!-- <transition name="fade" mode="out-in" appear>
+                <keep-alive>
+                    <router-view></router-view>
+                </keep-alive>
+            </transition> -->
             <mk-footer></mk-footer>
        </view-box>
     </div>
@@ -16,6 +23,8 @@
     import mkHeader from '@/components/header'
     import mkFooter from '@/components/footer'
     import { ViewBox } from 'vux'
+
+    const _ = require('lodash');
     export default {
         name: 'app',
         components: {
@@ -25,26 +34,40 @@
         },
         data () {
             return {
+                to: {},
+                from: {}
             }
         },
         computed: {
             ...mapState([
+                'isback',
                 'data'
             ])
+        },
+        watch: {
+            '$route' (to, from) {
+                this.$set(this, 'to', to)
+                this.$set(this, 'from', from)
+            }
         },
         methods: {
             ...mapActions([
                 'Data'
-            ])
+            ]),
+            afterEnter() {
+                this.$store.commit('ISBACK', false)
+                if (_.findIndex(['zc'], o => { return o === this.to.name }) === -1) {
+                    this.$store.dispatch('Data', {showFoot: true})
+                }
+            }
         },
         created() {
-            const _ = require('lodash');
             this.$nextTick(() => {
                 let viewBox = this.$refs.viewBox
-                this.Data({scroll: viewBox})
-                viewBox.getScrollBody().addEventListener('scroll', _.debounce(() => {
+                this.Data({scrollBox: viewBox})
+                viewBox.getScrollBody().addEventListener('scroll', _.throttle(() => {
                     this.Data({scrollTop: viewBox.getScrollTop()})
-                }, 50))
+                }, 500))
             })
         }
     }
@@ -56,5 +79,6 @@
     @import '~css/public.scss';
     #app {
         height: 100%;
+        overflow: hidden;
     }
 </style>

@@ -18,7 +18,7 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/4">
-                <router-link to="/project">
+                <router-link to="/love">
                     <div class="ibox1_item">
                         <img src="~img/ibox1_3.png" width="48" height="48" alt="">
                         <p>爱心轮椅</p>
@@ -26,15 +26,15 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/4">
-                <router-link to="/project">
+                <router-link to="/lovelist">
                     <div class="ibox1_item">
                         <img src="~img/ibox1_4.png" width="48" height="48" alt="">
-                        <p>爱心轮椅</p>
+                        <p>爱心榜</p>
                     </div>
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/4">
-                <router-link to="/project">
+                <router-link to="/zc/1">
                     <div class="ibox1_item">
                         <img src="~img/ibox1_5.png" width="48" height="48" alt="">
                         <p>我要行善</p>
@@ -42,7 +42,7 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/4">
-                <router-link to="/project">
+                <router-link to="/help">
                     <div class="ibox1_item">
                         <img src="~img/ibox1_6.png" width="48" height="48" alt="">
                         <p>我要求助</p>
@@ -50,7 +50,7 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/4">
-                <router-link to="/project">
+                <router-link to="/news/3">
                     <div class="ibox1_item">
                         <img src="~img/ibox1_7.png" width="48" height="48" alt="">
                         <p>财务公开</p>

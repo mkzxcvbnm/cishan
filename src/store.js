@@ -4,17 +4,16 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
+    isback: false,
+    love_type: ['', '拐杖', '轮椅'],
+    news_type: ['信息', '公告', '动态', '财务公开'],
     data: {
         title: '丹阳市九爱心社区',
-        sticky: false,
+        // sticky: false,
         showBack: true,
-        banner: [{
-            img: require('img/banner.jpg')
-        }],
-        scroll: window,
-        scrollTop: 0,
-        notice: [], // 通知
-        beneficiary: [] // 受益人数
+        showFoot: true,
+        scrollBox: window,
+        scrollTop: 0
     }
 }
 
@@ -22,6 +21,9 @@ const getters = {
 }
 
 const mutations = {
+    ISBACK (state, bool) {
+        state.isback = bool
+    },
     DATA (state, data) {
         for (let v in data) {
             state.data[v] = data[v];

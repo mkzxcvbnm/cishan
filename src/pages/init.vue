@@ -2,6 +2,7 @@
     <div class="init">
     </div>
 </template>
+
 <script>
     import { mapState, mapActions } from 'vuex'
     export default {
@@ -21,9 +22,12 @@
             ...mapActions([
                 'Data'
             ])
+        },
+        created() {
         }
     }
 </script>
+
 <style lang="scss" scoped>
     @import '~css/mk.scss';
 </style>

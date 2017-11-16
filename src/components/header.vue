@@ -1,6 +1,10 @@
 <template>
     <div class="header">
-        <x-header :left-options="{backText: '', showBack: data.showBack}">{{ data.title }}</x-header>
+        <x-header
+        :left-options="{backText: '', showBack: data.showBack}"
+        :transition="'header-fade-in-' + (isback ? 'left' : 'right')"
+        :title="data.title">
+        </x-header>
     </div>
 </template>
 <script>
@@ -17,6 +21,7 @@
         },
         computed: {
             ...mapState([
+                'isback',
                 'data'
             ])
         }

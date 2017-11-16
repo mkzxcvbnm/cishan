@@ -7,17 +7,27 @@ const mk = {
             method: 'post',
             url: url,
             data: data
-        }).catch(error => {
-            console.log('axios-post-error ' + error);
         })
     },
-    get(url) {
+    get(url, data = {}) {
         return AjaxPlugin.$http({
             method: 'get',
-            url: url
-        }).catch(error => {
-            console.log('axios-post-error ' + error);
+            url: url,
+            params: data
         })
+    },
+    validation(arr) {
+        let key = true
+        arr.every((v, i, a) => {
+            v.setTouched()
+            v.validate()
+            if (!v.valid) {
+                key = false
+                v.focus()
+            }
+            return v.valid
+        })
+        return key
     }
 }
 export default {

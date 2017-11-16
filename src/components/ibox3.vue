@@ -8,28 +8,29 @@
             </flexbox-item>
             <flexbox-item :span="2/3">
                 <div class="ibox3_tit_r">
-                    已有<span>66</span>人领用过爱心轮椅/拐杖
+                    已有<span>{{number}}</span>人领用过爱心轮椅/拐杖
                 </div>
             </flexbox-item>
         </flexbox>
         <div class="ibox3_list">
             <transition-group name="fade" mode="out-in" appear>
-                <flexbox v-for="(item, index) in data['beneficiary']" :key="item.id" class="ibox3_list_item center_box_full" :gutter="0" wrap="wrap" justify="space-around">
+                <flexbox v-for="(item, index) in list" :key="index" class="ibox3_list_item center_box_full" :gutter="0" wrap="wrap" justify="space-around">
                         <flexbox-item :span="2/3">
                             <div class="ibox3_list_l">
-                                <span>{{item.title.toString().substr(0,1)+item.title.toString().substr(1).replace(/./g, '*')}}</span><span>{{item.title.toString().substr(0,4)+"****"+item.title.toString().substr(8)}}</span>
-                                <p>已于{{item_date(item.update_time)}}前&nbsp;&nbsp;&nbsp;成功申请轮椅</p>
+                                <span>{{item.name.toString().substr(0,1)+item.name.toString().substr(1).replace(/./g, '*')}}</span><span>{{item.mobile.toString().substr(0,4)+"****"+item.mobile.toString().substr(8)}}</span>
+                                <p>已于{{item_date(item.begin_time)}}前&nbsp;&nbsp;&nbsp;成功申请{{item.type == 1 ? '拐杖' : '轮椅'}}</p>
                             </div>
                         </flexbox-item>
                         <flexbox-item :span="1/3">
                             <div class="ibox3_tit_r">
-                                <a :class="['ibox3_list_btn', item.id % 2 == 1 ? 'type_dz' : 'type_zs']" href="javascript:;">{{item.id % 2 == 1 ? '短租' : '赠送'}}</a>
+                                <a v-if="item.status == 0" class="ibox3_list_btn type_dz" href="javascript:;">短租</a>
+                                <a v-else class="ibox3_list_btn type_zs" href="javascript:;">赠送</a>
                             </div>
                         </flexbox-item>
                 </flexbox>
             </transition-group>
         </div>
-        <div class="ibox3_more" v-if="params.pages" @click="getlist">
+        <div class="ibox3_more" v-if="params.page" @click="getlist">
             <i v-show="!loading" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
             查看更多<i class="fa fa-angle-down" aria-hidden="true"></i>
         </div>
@@ -47,10 +48,12 @@
         data() {
             return {
                 loading: true,
+                number: 0,
+                list: [],
                 params: {
-                    cid: 35,
                     limit: 3,
-                    pages: 1
+                    page: 1,
+                    order: 1
                 }
             }
         },
@@ -70,17 +73,19 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.post('http://www.yunucms.cn/index.php/api/list', this.params).then(res => {
-                        this.PushData({beneficiary: res.data.data})
-                        try {
+                    this.get('http://jiujiu99.yuanhang.org/api/index/SyrItem', this.params).then(res => {
+                        let info = res.data.data
+                        this.$set(this, 'number', info.num)
+                        info.list.forEach(item => {
+                            this.list.push(item)
+                        })
+                        if (window.mk._events.success) {
                             window.mk.$emit('bindSticky')
-                        } catch (error) {
-                            console.log(error)
                         }
                         this.loading = true
-                        this.params.pages++
-                        if (!res.data.data.length || !this.params.limit || res.data.data.length < this.params.limit) {
-                            this.$set(this.params, 'pages', false)
+                        this.params.page++
+                        if (!info.list.length || !this.params.limit || info.list.length < this.params.limit) {
+                            this.params.page = false
                             return
                         }
                     })
