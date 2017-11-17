@@ -58,7 +58,7 @@
                         clearInterval(timer)
                     }
                 }, 1000)
-                this.get('http://jiujiu99.yuanhang.org/api/index/Article', {
+                this.get(this.api + 'api/index/Article', {
                     limit: 10,
                     classify: 1,
                     page: 1,
@@ -95,7 +95,7 @@
                     return
                 }
                 this.disabled = true
-                this.get('http://jiujiu99.yuanhang.org/api/index/Article', {
+                this.get(this.api + 'api/index/Article', {
                     limit: 10,
                     classify: 1,
                     page: 1,

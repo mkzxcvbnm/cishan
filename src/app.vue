@@ -24,7 +24,6 @@
     import mkFooter from '@/components/footer'
     import { ViewBox } from 'vux'
 
-    const _ = require('lodash');
     export default {
         name: 'app',
         components: {
@@ -55,14 +54,16 @@
                 'Data'
             ]),
             afterEnter() {
+                const array = require('lodash/array')
                 this.$store.commit('ISBACK', false)
-                if (_.findIndex(['zc'], o => { return o === this.to.name }) === -1) {
+                if (array.findIndex(['zc'], o => { return o === this.to.name }) === -1) {
                     this.$store.dispatch('Data', {showFoot: true})
                 }
             }
         },
         created() {
             this.$nextTick(() => {
+                const _ = require('lodash/function')
                 let viewBox = this.$refs.viewBox
                 this.Data({scrollBox: viewBox})
                 viewBox.getScrollBody().addEventListener('scroll', _.throttle(() => {

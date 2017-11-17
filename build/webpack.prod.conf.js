@@ -81,6 +81,12 @@ var webpackConfig = merge(baseWebpackConfig, {
                 )
             }
         }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'app', // <== should be entry key which contains the lazy imports
+            children: true,
+            async: true,
+            minChunks: 2
+        }),
         // extract webpack runtime and module manifest to its own file in order to
         // prevent vendor hash from being updated whenever app bundle is updated
         new webpack.optimize.CommonsChunkPlugin({

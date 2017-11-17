@@ -36,7 +36,7 @@
                 active: 0,
                 tab: [{
                     title: '一对一资助',
-                    url: 'http://jiujiu99.yuanhang.org/api/index/YdyItem',
+                    url: this.api + 'api/index/YdyItem',
                     list: [],
                     params: {
                         page: 1,
@@ -48,7 +48,7 @@
                 },
                 {
                     title: '众筹资助',
-                    url: 'http://jiujiu99.yuanhang.org/api/index/ZcItem',
+                    url: this.api + 'api/index/ZcItem',
                     list: [],
                     params: {
                         page: 1,

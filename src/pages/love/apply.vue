@@ -63,7 +63,7 @@
         },
         created() {
             this.Data({title: '爱心' + this.love_type[this.type] + '申请'})
-            this.get('http://jiujiu99.yuanhang.org/api/index/Sku', {id: this.type, type: this.type}).then(res => {
+            this.get(this.api + 'api/index/Sku', {id: this.type, type: this.type}).then(res => {
                 this.$set(this, 'sdata', res.data.data)
             })
         }

@@ -103,7 +103,7 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.get('http://jiujiu99.yuanhang.org/api/index/HelpItem', this.params).then(res => {
+                    this.get(this.api + 'api/index/HelpItem', this.params).then(res => {
                         let info = res.data.data
                         info.forEach(item => {
                             this.list.push(item)
@@ -133,7 +133,7 @@
                     return
                 }
                 this.disabled = true
-                this.get('http://jiujiu99.yuanhang.org/api/index/Article', {
+                this.get(this.api + 'api/index/Article', {
                     limit: 10,
                     classify: 1,
                     page: 1,

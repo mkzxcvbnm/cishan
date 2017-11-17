@@ -62,7 +62,7 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.get('http://jiujiu99.yuanhang.org/api/index/Article', this.params).then(res => {
+                    this.get(this.api + 'api/index/Article', this.params).then(res => {
                         let info = res.data.data
                         info.forEach(item => {
                             this.list.push(item)

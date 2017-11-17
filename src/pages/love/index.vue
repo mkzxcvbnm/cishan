@@ -71,7 +71,7 @@
                 'data'
             ]),
             scroll() {
-                const _ = require('lodash')
+                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -91,7 +91,7 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.get('http://jiujiu99.yuanhang.org/api/index/ZsApply', this.params).then(res => {
+                    this.get(this.api + 'api/index/ZsApply', this.params).then(res => {
                         let info = res.data.data
                         info.forEach(item => {
                             this.list.push(item)

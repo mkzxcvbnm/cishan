@@ -43,11 +43,11 @@
             return {
                 active: 0,
                 cate: [{
-                    url: 'http://jiujiu99.yuanhang.org/api/index/YdyItem',
+                    url: this.api + 'api/index/YdyItem',
                     title: '一对一资助'
                 },
                 {
-                    url: 'http://jiujiu99.yuanhang.org/api/index/ZcItem',
+                    url: this.api + 'api/index/ZcItem',
                     title: '众筹资助'
                 }],
                 tab: [{

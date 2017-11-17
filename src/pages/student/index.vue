@@ -30,7 +30,7 @@
             ])
         },
         created() {
-            this.get('http://jiujiu99.yuanhang.org/api/index/StudentShow', {id: this.id}).then(res => {
+            this.get(this.api + 'api/index/StudentShow', {id: this.id}).then(res => {
                 let info = res.data.data
                 this.$set(this, 'sdata', info)
             })

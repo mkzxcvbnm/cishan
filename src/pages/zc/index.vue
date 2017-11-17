@@ -151,7 +151,7 @@
                 let hf = this.reply
                 if (hf.loading) {
                     hf.loading = false
-                    this.get('http://jiujiu99.yuanhang.org/api/index/ZcReply', {tid: this.id, ...hf.params}).then(res => {
+                    this.get(this.api + 'api/index/ZcReply', {tid: this.id, ...hf.params}).then(res => {
                         let info = res.data.data
                         info.forEach(item => {
                             hf.list.push(item)
@@ -181,12 +181,12 @@
             }
         },
         created() {
-            this.get('http://jiujiu99.yuanhang.org/api/index/ZcShow', {id: this.id}).then(res => {
+            this.get(this.api + 'api/index/ZcShow', {id: this.id}).then(res => {
                 let info = res.data.data
                 this.Data({title: info.title})
                 this.$set(this, 'sdata', info)
             })
-            this.get('http://jiujiu99.yuanhang.org/api/index/ZcAvatar', {tid: this.id}).then(res => {
+            this.get(this.api + 'api/index/ZcAvatar', {tid: this.id}).then(res => {
                 let info = res.data.data
                 this.$set(this, 'avatar', info)
             })

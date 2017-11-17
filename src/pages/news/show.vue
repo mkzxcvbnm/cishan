@@ -42,7 +42,7 @@
                 return dateFormat(time, format)
             },
             setSdata() {
-                this.get('http://jiujiu99.yuanhang.org/api/index/ArticleShow', {id: this.$route.params.id}).then(res => {
+                this.get(this.api + 'api/index/ArticleShow', {id: this.$route.params.id}).then(res => {
                     this.$set(this, 'sdata', res.data.data)
                     this.Data({title: res.data.data.title})
                 })

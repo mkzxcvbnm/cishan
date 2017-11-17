@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import { AjaxPlugin } from 'vux'
+import { mapState, mapActions } from 'vuex'
 window.mk = new Vue()
 const mk = {
+    api: 'http://jiujiu99.yuanhang.org/',
     post(url, data = {}) {
         return AjaxPlugin.$http({
             method: 'post',
@@ -43,6 +45,17 @@ export default {
         })
         // 3. 注入组件
         Vue.mixin({
+            computed: {
+                ...mapState([
+                    'data'
+                ])
+            },
+            methods: {
+                ...mapActions([
+                    'Data',
+                    'PushData'
+                ])
+            },
             created: function () {
             // 逻辑...
             }

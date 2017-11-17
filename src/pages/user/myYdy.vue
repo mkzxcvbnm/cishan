@@ -68,7 +68,7 @@
                 'data'
             ]),
             scroll() {
-                const _ = require('lodash')
+                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -83,7 +83,7 @@
                 'Data'
             ]),
             getlist() {
-                this.get('http://jiujiu99.yuanhang.org/api/index/Student', {tid: 3}).then(res => {
+                this.get(this.api + 'api/index/Student', {tid: 3}).then(res => {
                     let info = res.data.data
                     info.forEach(item => {
                         this.list.push(item)

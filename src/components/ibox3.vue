@@ -73,7 +73,7 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.get('http://jiujiu99.yuanhang.org/api/index/SyrItem', this.params).then(res => {
+                    this.get(this.api + 'api/index/SyrItem', this.params).then(res => {
                         let info = res.data.data
                         this.$set(this, 'number', info.num)
                         info.list.forEach(item => {

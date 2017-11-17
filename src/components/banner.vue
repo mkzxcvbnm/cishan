@@ -29,7 +29,7 @@
             ])
         },
         created() {
-            this.get('http://jiujiu99.yuanhang.org/api/index/Slide').then(res => {
+            this.get(this.api + 'api/index/Slide').then(res => {
                 let info = res.data.data.map((item, index) => ({
                     img: item.image
                 }))

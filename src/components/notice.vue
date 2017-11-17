@@ -21,7 +21,7 @@
             }
         },
         created() {
-            this.get('http://jiujiu99.yuanhang.org/api/index/Article', {
+            this.get(this.api + 'api/index/Article', {
                 limit: 10,
                 classify: 1,
                 page: 1,
