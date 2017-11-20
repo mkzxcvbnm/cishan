@@ -29,7 +29,6 @@
     </div>
 </template>
 <script>
-    import { mapState } from 'vuex'
     import { Tabbar, TabbarItem } from 'vux'
     export default {
         name: 'footer',
@@ -41,11 +40,6 @@
             return {
                 to: '/'
             }
-        },
-        computed: {
-            ...mapState([
-                'data'
-            ])
         },
         watch: {
             '$route' (to, from) {

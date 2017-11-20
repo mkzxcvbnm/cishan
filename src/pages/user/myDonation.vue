@@ -14,7 +14,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { dateFormat, LoadMore } from 'vux'
     export default {
         name: 'myDonation',
@@ -34,9 +33,6 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             scroll() {
                 const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
@@ -49,9 +45,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             dateFormat(time, format) {
                 return dateFormat(time, format)
             },

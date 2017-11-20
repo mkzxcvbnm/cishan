@@ -21,8 +21,7 @@
         },
         computed: {
             ...mapState([
-                'isback',
-                'data'
+                'isback'
             ])
         }
     }

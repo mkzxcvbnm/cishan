@@ -29,7 +29,6 @@
     </div>
 </template>
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Flexbox, FlexboxItem } from 'vux'
     export default {
         name: 'lovelist',
@@ -50,15 +49,7 @@
                 }
             }
         },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
         methods: {
-            ...mapActions([
-                'PushData'
-            ]),
             getlist() {
                 if (this.loading) {
                     this.loading = false

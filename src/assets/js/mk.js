@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import { AjaxPlugin } from 'vux'
 import { mapState, mapActions } from 'vuex'
-window.mk = new Vue()
 const mk = {
-    api: 'http://jiujiu99.yuanhang.org/',
+    api: '//jiujiu99.yuanhang.org/',
+    transfer: new Vue(),
     post(url, data = {}) {
         return AjaxPlugin.$http({
             method: 'post',

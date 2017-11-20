@@ -1,5 +1,8 @@
 <template>
     <div id="app">
+        <transition name="fade" mode="out-in" appear>
+            <loading v-model="isloading" position="absolute"></loading>
+        </transition>
         <view-box class="oh" ref="viewBox" body-padding-top="46px" body-padding-bottom="80px">
             <mk-header></mk-header>
             <transition
@@ -9,27 +12,24 @@
             >
                 <router-view></router-view>
             </transition>
-            <!-- <transition name="fade" mode="out-in" appear>
-                <keep-alive>
-                    <router-view></router-view>
-                </keep-alive>
-            </transition> -->
             <mk-footer></mk-footer>
        </view-box>
     </div>
 </template>
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
     import mkHeader from '@/components/header'
     import mkFooter from '@/components/footer'
-    import { ViewBox } from 'vux'
+    import { ViewBox, Loading, Masker } from 'vux'
 
     export default {
         name: 'app',
         components: {
             mkHeader,
             mkFooter,
-            ViewBox
+            ViewBox,
+            Loading,
+            Masker
         },
         data () {
             return {
@@ -40,7 +40,7 @@
         computed: {
             ...mapState([
                 'isback',
-                'data'
+                'isloading'
             ])
         },
         watch: {
@@ -50,9 +50,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             afterEnter() {
                 const array = require('lodash/array')
                 this.$store.commit('ISBACK', false)

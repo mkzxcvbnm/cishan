@@ -18,7 +18,6 @@
     </div>
 </template>
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Sticky, Tab, TabItem } from 'vux'
     import listYdy from '@/components/list_ydy'
     import listZc from '@/components/list_zc'
@@ -60,15 +59,7 @@
                 }]
             }
         },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             getlist(index) {
                 this.$set(this, 'active', index)
                 let info = this.tab[index]
@@ -83,8 +74,8 @@
         },
         created() {
             this.getlist(0)
-            window.mk.$off('bindSticky')
-            window.mk.$on('bindSticky', () => {
+            this.transfer.$off('bindSticky')
+            this.transfer.$on('bindSticky', () => {
                 this.$refs.sticky.bindSticky()
             })
         }

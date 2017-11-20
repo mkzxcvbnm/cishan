@@ -15,7 +15,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import mkBanner from '@/components/banner'
     import mkNotice from '@/components/notice'
     import mkIbox1 from '@/components/ibox1'
@@ -35,16 +34,6 @@
         data() {
             return {
             }
-        },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
         },
         created() {
             this.Data({title: '丹阳市九爱心社区'})

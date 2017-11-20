@@ -37,7 +37,6 @@
     </div>
 </template>
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Flexbox, FlexboxItem } from 'vux'
     export default {
         name: 'ibox3',
@@ -57,15 +56,7 @@
                 }
             }
         },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
         methods: {
-            ...mapActions([
-                'PushData'
-            ]),
             item_date(time) {
                 let day = Math.ceil((new Date().getTime() / 1000 - time) / 86400)
                 return day > 30 && day <= 90 ? '三个月' : day + '天'
@@ -79,8 +70,8 @@
                         info.list.forEach(item => {
                             this.list.push(item)
                         })
-                        if (window.mk._events.success) {
-                            window.mk.$emit('bindSticky')
+                        if (this.transfer._events.success) {
+                            this.transfer.$emit('bindSticky')
                         }
                         this.loading = true
                         this.params.page++

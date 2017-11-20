@@ -41,7 +41,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import mkNotice from '@/components/notice'
     import mkIbox2 from '@/components/ibox2'
     import mkIbox3 from '@/components/ibox3'
@@ -67,9 +66,6 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             scroll() {
                 const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
@@ -82,9 +78,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             dateFormat(time, format) {
                 return dateFormat(time, format)
             },

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
     import { Group, XButton, Cell, Checklist, XInput, XTextarea } from 'vux'
     export default {
         name: 'chairFree',
@@ -55,17 +55,13 @@
         },
         computed: {
             ...mapState([
-                'love_type',
-                'data'
+                'love_type'
             ]),
             type() {
                 return this.$route.params.type
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             submit() {
                 if (!this.agree.length) {
                     this.$vux.toast.show({

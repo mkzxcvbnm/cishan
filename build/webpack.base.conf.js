@@ -75,6 +75,8 @@ let webpackConfig = {
     },
     plugins: [
         new webpack.ProvidePlugin({
+            'window.Vue': ['vue/dist/vue.esm.js', 'default'],
+            'window.vuex': 'vuex'
         })
     ]
 }

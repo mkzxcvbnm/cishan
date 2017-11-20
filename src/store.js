@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 const state = {
     isback: false,
+    isloading: true,
     love_type: ['', '拐杖', '轮椅'],
     news_type: ['信息', '公告', '动态', '财务公开'],
     data: {
@@ -23,6 +24,9 @@ const getters = {
 const mutations = {
     ISBACK (state, bool) {
         state.isback = bool
+    },
+    ISLOADING (state, bool) {
+        state.isloading = bool
     },
     DATA (state, data) {
         for (let v in data) {

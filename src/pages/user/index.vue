@@ -37,7 +37,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { XImg, Group, Cell, Badge } from 'vux'
     export default {
         name: 'user',
@@ -50,16 +49,6 @@
         data() {
             return {
             }
-        },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
         },
         created() {
             this.Data({title: '个人中心'})

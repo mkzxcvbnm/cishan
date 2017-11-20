@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
     import { XProgress, Flexbox, FlexboxItem, XButton } from 'vux'
     import mkIbox3 from '@/components/ibox3'
     import noticePopup from '@/components/notice_popup'
@@ -49,17 +49,11 @@
         },
         computed: {
             ...mapState([
-                'love_type',
-                'data'
+                'love_type'
             ]),
             type() {
                 return this.$route.params.type
             }
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
         },
         created() {
             this.Data({title: '爱心' + this.love_type[this.type] + '申请'})

@@ -24,7 +24,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Checker, CheckerItem, XButton, Group, XInput, XTextarea } from 'vux'
     export default {
         name: 'zcPay',
@@ -50,18 +49,11 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             quick_payment() {
                 return this.$route.params.quick_payment.split('|')
             }
         },
         methods: {
-            ...mapActions([
-                'Data',
-                'PushData'
-            ]),
             pay() {
                 if (this.money_num(this.money)['valid'] && this.money) {
                     this.$vux.alert.show({

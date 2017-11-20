@@ -44,7 +44,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { LoadMore, FormPreview } from 'vux'
     export default {
         name: 'myYdy',
@@ -64,9 +63,6 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             scroll() {
                 const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
@@ -79,9 +75,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             getlist() {
                 this.get(this.api + 'api/index/Student', {tid: 3}).then(res => {
                     let info = res.data.data

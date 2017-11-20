@@ -8,7 +8,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { LoadMore } from 'vux'
     import listZc from '@/components/list_zc'
     export default {
@@ -30,9 +29,6 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             scroll() {
                 const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
@@ -45,9 +41,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             getlist() {
                 this.get(this.api + 'api/index/ZcItem', this.params).then(res => {
                     let info = res.data.data

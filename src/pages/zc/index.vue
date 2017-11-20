@@ -90,7 +90,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { dateFormat, Tabbar, TabbarItem, Clocker, XProgress, Flexbox, FlexboxItem } from 'vux'
     import mkRbtn from '@/components/rbtn'
     import velocity from 'velocity-animate'
@@ -120,18 +119,11 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             id() {
                 return this.$route.params.id
             }
         },
         methods: {
-            ...mapActions([
-                'Data',
-                'PushData'
-            ]),
             dateFormat(time, format) {
                 return dateFormat(time, format)
             },

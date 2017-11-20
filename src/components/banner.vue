@@ -4,7 +4,6 @@
     </div>
 </template>
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Swiper } from 'vux'
     export default {
         name: 'banner',
@@ -17,16 +16,6 @@
                     img: require('img/banner.jpg')
                 }]
             }
-        },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
         },
         created() {
             this.get(this.api + 'api/index/Slide').then(res => {

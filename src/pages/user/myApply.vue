@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
     import { FormPreview, LoadMore, dateFormat, XButton } from 'vux'
     export default {
         name: 'myApply',
@@ -56,8 +56,7 @@
         },
         computed: {
             ...mapState([
-                'love_type',
-                'data'
+                'love_type'
             ]),
             scroll() {
                 const _ = require('lodash/function')
@@ -71,9 +70,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             dateFormat(time, format) {
                 return dateFormat(time, format)
             },

@@ -19,7 +19,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Group, Cell, XInput, XButton } from 'vux'
     export default {
         name: 'verifyPhone',
@@ -37,15 +36,7 @@
                 disabled: false
             }
         },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             getvcode() {
                 if (!this.tel || !this.tel.match(/^1\d{10}$/)) {
                     this.$vux.alert.show('手机号码错误')

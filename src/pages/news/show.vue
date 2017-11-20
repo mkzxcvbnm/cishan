@@ -13,7 +13,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { dateFormat } from 'vux'
     export default {
         name: 'show',
@@ -24,20 +23,12 @@
                 sdata: {}
             }
         },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
         watch: {
             '$route' (to, from) {
                 this.setSdata()
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             dateFormat(time, format) {
                 return dateFormat(time, format)
             },

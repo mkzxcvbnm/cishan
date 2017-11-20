@@ -69,7 +69,6 @@
     </div>
 </template>
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Flexbox, FlexboxItem } from 'vux'
     export default {
         name: 'ibox1',
@@ -80,16 +79,6 @@
         data() {
             return {
             }
-        },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
         }
     }
 </script>

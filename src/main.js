@@ -3,13 +3,11 @@
 import Vue from 'vue'
 import router from '@/router'
 import store from '@/store'
-// import FastClick from 'fastclick'
+import FastClick from 'fastclick'
 import App from './App'
-import { AjaxPlugin, AlertPlugin, ConfirmPlugin, ToastPlugin } from 'vux'
+import { AjaxPlugin, AlertPlugin, ConfirmPlugin, ToastPlugin, WechatPlugin } from 'vux'
 import 'font-awesome/css/font-awesome.css'
 import mk from 'js/mk'
-
-require('js/transition')
 
 AjaxPlugin.$http.interceptors.request.use(config => {
     return config;
@@ -25,11 +23,12 @@ AjaxPlugin.$http.interceptors.response.use(response => {
 
 router.beforeEach((to, from, next) => {
     store.dispatch('Data', {showBack: to.path !== '/', showFoot: false})
+    store.commit('ISLOADING', true)
     next()
 })
 
 router.afterEach((to) => {
-
+    store.commit('ISLOADING', false)
 })
 
 window.addEventListener('popstate', function(e) {
@@ -40,13 +39,16 @@ Vue.use(AjaxPlugin)
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
 Vue.use(ToastPlugin)
+Vue.use(WechatPlugin)
 Vue.use(mk)
 
-// FastClick.attach(document.body)
+FastClick.attach(document.body)
 
 require('es6-promise').polyfill()
 
 Vue.config.productionTip = false
+
+console.log(Vue.wechat.config)
 
 /* eslint-disable no-new */
 new Vue({

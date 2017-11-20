@@ -76,7 +76,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { dateFormat, XDialog, FormPreview, Clocker } from 'vux'
     import noticePopup from '@/components/notice_popup'
     import velocity from 'velocity-animate'
@@ -96,18 +95,11 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             id() {
                 return this.$route.params.id
             }
         },
         methods: {
-            ...mapActions([
-                'Data',
-                'PushData'
-            ]),
             dateFormat(time, format) {
                 return dateFormat(time, format)
             },

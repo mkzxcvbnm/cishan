@@ -6,7 +6,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     export default {
         name: 'student',
         components: {
@@ -17,17 +16,9 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             id() {
                 return this.$route.params.id
             }
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
         },
         created() {
             this.get(this.api + 'api/index/StudentShow', {id: this.id}).then(res => {

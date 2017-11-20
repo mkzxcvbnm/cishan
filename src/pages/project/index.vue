@@ -1,11 +1,11 @@
 <template>
     <div class="project">
         <div class="interval"></div>
-        <sticky scroll-box="vux_view_box_body" ref="sticky" :check-sticky-support="false" :offset="46">
+        <!-- <sticky scroll-box="vux_view_box_body" ref="sticky" :check-sticky-support="false" :offset="46"> -->
             <tab :line-width="2" active-color="#09bb07" v-model="active">
                 <tab-item class="vux-center" :selected="active === index" v-for="(item, index) in tab" :key="index">{{item.title}}</tab-item>
             </tab>
-        </sticky>
+        <!-- </sticky> -->
         <swiper v-model="active" height="100%" :show-dots="false" @on-index-change="getlist">
             <swiper-item v-for="(item, index) in tab" :key="index">
                 <scroller lock-x height="100%" @on-scroll-bottom="getlist(index)" ref="scroller" :scroll-bottom-offst="100">
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Tab, TabItem, Sticky, Swiper, SwiperItem, Scroller, LoadMore, dateFormat } from 'vux'
     import listYdy from '@/components/list_ydy'
     import listZc from '@/components/list_zc'
@@ -97,18 +96,11 @@
             }
         },
         computed: {
-            ...mapState([
-                'data'
-            ]),
             type() {
                 return this.$route.params.type
             }
         },
         methods: {
-            ...mapActions([
-                'Data',
-                'PushData'
-            ]),
             getlist(index) {
                 let tab = this.tab[index]
                 let params = tab.params

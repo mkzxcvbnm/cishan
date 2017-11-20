@@ -17,7 +17,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { XInput, Group, XButton } from 'vux'
     export default {
         name: 'donation',
@@ -34,15 +33,7 @@
                 disabled: false
             }
         },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             submit() {
                 if (!this.validation([this.$refs.name, this.$refs.tel, this.$refs.num])) {
                     this.$vux.toast.show({

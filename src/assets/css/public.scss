@@ -385,6 +385,9 @@ button {
     }
 }
 body {
+    .vux-loading .weui-mask_transparent {
+        background-color: rgba(0, 0, 0 , .5);
+    }
     .weui-input, .weui-textarea {
         @include placeholder(#a3a3a3, 15px)
     }

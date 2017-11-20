@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
     import { dateFormat, LoadMore } from 'vux'
     export default {
         name: 'news',
@@ -37,8 +37,7 @@
         },
         computed: {
             ...mapState([
-                'news_type',
-                'data'
+                'news_type'
             ]),
             scroll() {
                 const _ = require('lodash/function')
@@ -61,9 +60,6 @@
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             dateFormat(time, format) {
                 return dateFormat(time, format)
             },

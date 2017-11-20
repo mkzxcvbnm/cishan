@@ -14,7 +14,6 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
     import { Group, Cell } from 'vux'
     export default {
         name: 'setting',
@@ -25,16 +24,6 @@
         data() {
             return {
             }
-        },
-        computed: {
-            ...mapState([
-                'data'
-            ])
-        },
-        methods: {
-            ...mapActions([
-                'Data'
-            ])
         },
         created() {
             this.Data({title: '会员资料'})

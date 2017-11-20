@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex'
+    import { mapState } from 'vuex'
     import { Group, XButton, Cell, Checklist } from 'vux'
     export default {
         name: 'chairPay',
@@ -43,17 +43,13 @@
         },
         computed: {
             ...mapState([
-                'love_type',
-                'data'
+                'love_type'
             ]),
             type() {
                 return this.$route.params.type
             }
         },
         methods: {
-            ...mapActions([
-                'Data'
-            ]),
             pay() {
                 if (!this.agree.length) {
                     this.$vux.toast.show({

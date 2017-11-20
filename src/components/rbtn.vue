@@ -5,17 +5,11 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
     export default {
         name: 'rbtn',
         data() {
             return {
             }
-        },
-        computed: {
-            ...mapState([
-                'data'
-            ])
         }
     }
 </script>
