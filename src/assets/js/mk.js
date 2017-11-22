@@ -2,7 +2,8 @@ import Vue from 'vue'
 import { AjaxPlugin } from 'vux'
 import { mapState, mapActions } from 'vuex'
 const mk = {
-    api: '//jiujiu99.yuanhang.org/',
+    env: process.env.NODE_ENV,
+    api: this.env === 'production' ? '//api.jiujiu99.net/' : '',
     transfer: new Vue(),
     post(url, data = {}) {
         return AjaxPlugin.$http({
@@ -17,6 +18,15 @@ const mk = {
             url: url,
             params: data
         })
+    },
+    getCookie(name) {
+        var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+        var arr = document.cookie.match(reg);
+        if (arr) {
+            return (arr[2]);
+        } else {
+            return null;
+        }
     },
     validation(arr) {
         let key = true

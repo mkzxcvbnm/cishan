@@ -42,18 +42,15 @@
                     this.$vux.alert.show('手机号码错误')
                     return;
                 }
-                this.vcode_time = 60;
+                this.vcode_time = 60
                 let timer = setInterval(() => {
-                    this.vcode_time--;
+                    this.vcode_time--
                     if (this.vcode_time === 0) {
                         clearInterval(timer)
                     }
                 }, 1000)
-                this.get(this.api + 'api/index/Article', {
-                    limit: 10,
-                    classify: 1,
-                    page: 1,
-                    order: 1
+                this.post(this.api + 'api/action/MobileCode', {
+                    tel: this.tel
                 }).then(res => {
                     this.$vux.alert.show({
                         title: '成功',
@@ -67,7 +64,7 @@
                     })
                     console.log(error)
                     this.disabled = false
-                    this.vcode_time = 3
+                    this.$set(this, 'vcode_time', 3)
                 })
             },
             submit() {

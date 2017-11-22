@@ -59,6 +59,20 @@
             }
         },
         created() {
+            const jsonp = require('jsonp')
+            jsonp(this.api + 'api/wxauth/getAsCookie', null, (err, data) => {
+                if (err) {
+                    console.error(err.message)
+                } else {
+                    if (data.data.openid === null || data.data.access_token === null) {
+                        window.location.href = this.api + 'api/wxauth?return_url=' + window.location.href
+                    } else {
+                        this.post(this.api + 'api/wxauth/getUserInfo', {openid: data.data.openid, access_token: data.data.access_token}).then(res => {
+                            console.log(res)
+                        })
+                    }
+                }
+            })
             this.$nextTick(() => {
                 const _ = require('lodash/function')
                 let viewBox = this.$refs.viewBox

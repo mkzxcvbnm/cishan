@@ -48,7 +48,7 @@ require('es6-promise').polyfill()
 
 Vue.config.productionTip = false
 
-console.log(Vue.wechat.config)
+// console.log(Vue.wechat.config)
 
 /* eslint-disable no-new */
 new Vue({
