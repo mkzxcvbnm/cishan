@@ -17,20 +17,25 @@ class Wxauth extends Controller
     {
         //header("content-type:text/html;charset=utf-8");
         header("Access-Control-Allow-Credentials: true");
-        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Origin: https://wx.jiujiu99.net");
+        // header("Access-Control-Allow-Origin: http://localhost:8080");
+        header('Access-Control-Allow-Headers:x-requested-with,content-type');
         //echo '111';
     }
 
     public function index()
     {
+		//cookie(null);
         $return_url = input('get.return_url');
+		$regex = "/\#/";
+		$return_url = preg_replace($regex,"Goto",$return_url);
         $this->redirect(url('wxauth/wxlogin', '', '').'?return_url='.$return_url);
     }
 
-    public function getAsCookie()
-    {
-        return jsonp(['data' => ['openid' => cookie('openid'), 'access_token' => cookie('access_token')]]);
-    }
+    // public function getAsCookie()
+    // {
+    //     return json(['data' => ['openid' => cookie('openid'), 'access_token' => cookie('access_token')]]);
+    // }
 
     public function wxlogin()
     {
@@ -52,6 +57,9 @@ class Wxauth extends Controller
         $appid = $setwx['wx_appid'];
         $secret = $setwx['wx_appecrt'];
         $code = input('get.code');
+		if (empty($code)) {
+			return json(['code' => '1', 'msg' => 'error', 'data' => '']);
+		}
         $get_token_url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $appid . '&secret=' . $secret . '&code=' . $code . '&grant_type=authorization_code';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $get_token_url);
@@ -64,19 +72,21 @@ class Wxauth extends Controller
         //var_dump($json_obj);
         $return_url = input('get.state');
         if (empty($return_url)) {
-            $return_url = "https://wx.jiujiu99.net/#/user";
+			$return_url = "https://wx.jiujiu99.net/#/user";
         }
-        Cookie::set('access_token', $json_obj['access_token'], ['expire' => 3600]);
-        Cookie::set('openid', $json_obj['openid'], ['expire' => 3600]);
+		$regex = "/Goto/";
+		$return_url = preg_replace($regex,"#",$return_url);		
+        Cookie::set('access_token', $json_obj['access_token'], ['expire' => 3600,'domain' => '.jiujiu99.net']);
+        Cookie::set('openid', $json_obj['openid'], ['expire' => 3600,'domain' => '.jiujiu99.net']);
         $this->redirect($return_url);
     }
 
     public function getUserInfo()
     {
         // 根据openid和access_token查询用户信息
-        $access_token = input('post.access_token');
-        $openid = input('post.openid');
-        if (empty($access_token) || empty($openid)) {
+        $access_token = cookie('access_token');
+        $openid = cookie('openid');
+        if (empty($access_token) || empty($openid) || $access_token == null || $openid == null) {
             return json(['code' => '1', 'msg' => 'error', 'data' => '']);
         }
         $get_user_info_url = 'https://api.weixin.qq.com/sns/userinfo?access_token=' . $access_token . '&openid=' . $openid . '&lang=zh_CN';

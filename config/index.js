@@ -31,8 +31,7 @@ module.exports = {
             '/api': {
                 target: 'https://api.jiujiu99.net',
                 changeOrigin: true,
-                onProxyReq (proxyReq, req, res) {
-                }
+                cookieDomainRewrite: '.jiujiu99.net'
             }
         },
         // CSS Sourcemaps off by default because relative paths are "buggy"

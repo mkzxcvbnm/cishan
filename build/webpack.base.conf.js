@@ -27,7 +27,7 @@ let webpackConfig = {
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            'vue$': 'vue/dist/vue.esm.js',
+            'vue$': 'vue/dist/vue.runtime.esm.js',
             '@': resolve('src'),
             'assets': resolve('src/assets'),
             'css': resolve('src/assets/css'),
@@ -75,7 +75,7 @@ let webpackConfig = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            'window.Vue': ['vue/dist/vue.esm.js', 'default'],
+            'window.Vue': ['vue/dist/vue.runtime.esm.js', 'default'],
             'window.vuex': 'vuex'
         })
     ]

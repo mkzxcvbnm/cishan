@@ -56,33 +56,38 @@
                 //     })
                 //     return
                 // }
-                let t = this
                 if (this.num === '0' || !this.num.match(/^\d+$/)) {
                     this.$vux.toast.show({
                         type: 'warn',
                         text: '捐赠数量必须为正整数',
-                        onHide() {
-                            t.$refs.num.focus()
-                        }
+                        onHide: function() {
+                            this.$refs.num.focus()
+                        }.bind(this)
                     })
                     return
                 }
                 this.disabled = true
-                this.get(this.api + 'api/index/Article', {
-                    limit: 10,
-                    classify: 1,
-                    page: 1,
-                    order: 1
+                this.post(this.api + 'api/action/GiveDo', {
+                    uid: this.user.uid,
+                    name: this.name,
+                    mobile: this.tel,
+                    num: this.num
                 }).then(res => {
-                    let t = this
-                    this.$vux.alert.show({
-                        title: '成功',
-                        content: {name: this.name, tel: this.tel, num: this.num},
-                        onHide() {
-                            t.$router.go(-1)
-                        }
-                    })
-                    this.disabled = false
+                    if (res.data.code === '0') {
+                        this.$vux.alert.show({
+                            title: '成功',
+                            content: '捐赠成功',
+                            onHide: function() {
+                                this.$router.go(-1)
+                            }.bind(this)
+                        })
+                    } else {
+                        this.$vux.alert.show({
+                            title: '失败',
+                            content: '捐赠失败'
+                        })
+                        this.disabled = false
+                    }
                 }).catch(error => {
                     this.$vux.alert.show({
                         title: '错误',

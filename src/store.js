@@ -3,9 +3,13 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+const array = require('lodash/array')
+const _ = require('lodash/core')
+
 const state = {
     isback: false,
     isloading: true,
+    backurl: false,
     love_type: ['', '拐杖', '轮椅'],
     news_type: ['信息', '公告', '动态', '财务公开'],
     data: {
@@ -15,7 +19,8 @@ const state = {
         showFoot: true,
         scrollBox: window,
         scrollTop: 0
-    }
+    },
+    user: {}
 }
 
 const getters = {
@@ -28,6 +33,9 @@ const mutations = {
     ISLOADING (state, bool) {
         state.isloading = bool
     },
+    BACKURL (state, data) {
+        state.backurl = data
+    },
     DATA (state, data) {
         for (let v in data) {
             state.data[v] = data[v];
@@ -35,8 +43,6 @@ const mutations = {
         }
     },
     PUSHDATA (state, data) {
-        const array = require('lodash/array')
-        const _ = require('lodash/core')
         for (let v in data) {
             // for (let item of data[v]) {
             //     state.data[v].push(item);
@@ -53,6 +59,9 @@ const mutations = {
         // uniqdata = array.uniqBy(uniqdata, 'id')
         // array.reverse(uniqdata)
         // state.data[data] = uniqdata
+    },
+    USER (state, data) {
+        state.user = data
     }
 }
 
@@ -65,6 +74,9 @@ const actions = {
     },
     UniqData ({ commit }, data) {
         commit('UNIQDATA', data)
+    },
+    User ({ commit }, data) {
+        commit('USER', data)
     }
 }
 

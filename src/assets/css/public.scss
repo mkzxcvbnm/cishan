@@ -150,6 +150,14 @@ button {
 .header-fade-in-left-enter-active {
     animation: headerOut .5s;
 }
+.footer-enter-active, .footer-leave-active {
+    will-change: transform;
+    transition: all .3s;
+}
+.footer-enter, .footer-leave-to {
+    opacity: 0;
+    transform: translate3d(0, 150%, 0);
+}
 @keyframes headerIn {
     0% {
         opacity: 0;
@@ -385,8 +393,12 @@ button {
     }
 }
 body {
-    .vux-loading .weui-mask_transparent {
-        background-color: rgba(0, 0, 0 , .5);
+    .vux-loading {
+        position: relative;
+        z-index: 999;
+        .weui-mask_transparent {
+            background-color: rgba(0, 0, 0 , .1);
+        }
     }
     .weui-input, .weui-textarea {
         @include placeholder(#a3a3a3, 15px)

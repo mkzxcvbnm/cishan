@@ -45,6 +45,7 @@
 
 <script>
     import { LoadMore, FormPreview } from 'vux'
+    const _ = require('lodash/function')
     export default {
         name: 'myYdy',
         components: {
@@ -56,7 +57,7 @@
                 list: [],
                 loading: true,
                 params: {
-                    limit: 6,
+                    limit: false,
                     page: 1,
                     type: 2
                 }
@@ -64,7 +65,6 @@
         },
         computed: {
             scroll() {
-                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -76,13 +76,14 @@
         },
         methods: {
             getlist() {
-                this.get(this.api + 'api/index/Student', {tid: 3}).then(res => {
+                this.get(this.api + 'api/index/MemberItem', {uid: this.user.uid, item: 'ydy'}).then(res => {
                     let info = res.data.data
                     info.forEach(item => {
                         this.list.push(item)
                     })
                     if (!info.length || !this.params.limit || info.length < this.params.limit) {
                         this.$set(this.params, 'page', false)
+                        this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
                         return
                     }
                     this.$set(this.params, 'page', this.params.page + 1)

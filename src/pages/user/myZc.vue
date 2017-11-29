@@ -10,6 +10,7 @@
 <script>
     import { LoadMore } from 'vux'
     import listZc from '@/components/list_zc'
+    const _ = require('lodash/function')
     export default {
         name: 'myZc',
         components: {
@@ -21,7 +22,7 @@
                 list: [],
                 loading: true,
                 params: {
-                    limit: 6,
+                    limit: false,
                     page: 1,
                     order: 1,
                     status: 'all'
@@ -30,7 +31,6 @@
         },
         computed: {
             scroll() {
-                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -42,13 +42,14 @@
         },
         methods: {
             getlist() {
-                this.get(this.api + 'api/index/ZcItem', this.params).then(res => {
+                this.get(this.api + 'api/index/MemberItem', {uid: this.user.uid, item: 'zc'}).then(res => {
                     let info = res.data.data
                     info.forEach(item => {
                         this.list.push(item)
                     })
                     if (!info.length || !this.params.limit || info.length < this.params.limit) {
                         this.$set(this.params, 'page', false)
+                        this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
                         return
                     }
                     this.$set(this.params, 'page', this.params.page + 1)

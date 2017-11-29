@@ -45,6 +45,7 @@
     import mkIbox2 from '@/components/ibox2'
     import mkIbox3 from '@/components/ibox3'
     import { FormPreview, LoadMore, dateFormat } from 'vux'
+    const _ = require('lodash/function')
     export default {
         name: 'love',
         components: {
@@ -67,7 +68,6 @@
         },
         computed: {
             scroll() {
-                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -91,6 +91,7 @@
                         })
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.$set(this.params, 'page', false)
+                            this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
                             return
                         }
                         this.$set(this.params, 'page', this.params.page + 1)

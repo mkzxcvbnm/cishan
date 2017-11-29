@@ -2,11 +2,11 @@
     <div class="setting">
         <group>
             <cell title="头像">
-                <img class="avatar" src="~img/avatar.png" height="62">
+                <img :src="user.avatar ? user.avatar : require('img/avatar.png')" class="avatar" height="62">
             </cell>
-            <cell title="姓名" is-link><span class="default mr20">张三</span></cell>
+            <cell title="姓名" is-link><span class="default mr20">{{user.nikename}}</span></cell>
             <cell>
-                <div slot="title">手机号<span class="default ml20">暂未绑定手机号码</span></div>
+                <div slot="title">手机号<span class="default ml20" v-if="!user.mobile">暂未绑定手机号码</span></div>
                 <router-link class="color" slot="default" to="/verifyPhone">立即绑定</router-link>
             </cell>
         </group>

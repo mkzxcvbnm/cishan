@@ -18,6 +18,7 @@
 <script>
     import { mapState } from 'vuex'
     import { dateFormat, LoadMore } from 'vux'
+    const _ = require('lodash/function')
     export default {
         name: 'news',
         components: {
@@ -40,7 +41,6 @@
                 'news_type'
             ]),
             scroll() {
-                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -76,6 +76,7 @@
                         })
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.params.page = false
+                            this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
                             return
                         }
                         this.loading = true

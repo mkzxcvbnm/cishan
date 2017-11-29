@@ -13,12 +13,13 @@
             </x-input>
         </group>
         <div class="center mt20">
-            <x-button text="提交" :disabled="disabled" @click.native="submit" type="primary"></x-button>
+            <x-button text="提交" :disabled="disabled || !tel || !vcode" @click.native="submit" type="primary"></x-button>
         </div>
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     import { Group, Cell, XInput, XButton } from 'vux'
     export default {
         name: 'verifyPhone',
@@ -36,6 +37,11 @@
                 disabled: false
             }
         },
+        computed: {
+            ...mapState([
+                'backurl'
+            ])
+        },
         methods: {
             getvcode() {
                 if (!this.tel || !this.tel.match(/^1\d{10}$/)) {
@@ -52,18 +58,25 @@
                 this.post(this.api + 'api/action/MobileCode', {
                     tel: this.tel
                 }).then(res => {
-                    this.$vux.alert.show({
-                        title: '成功',
-                        content: '发送成功'
-                    })
-                    this.disabled = false
+                    let info = res.data
+                    if (info.code === 0) {
+                        this.$vux.alert.show({
+                            title: '成功',
+                            content: '发送成功'
+                        })
+                    } else {
+                        this.$vux.alert.show({
+                            title: '错误',
+                            content: info.msg
+                        })
+                        this.$set(this, 'vcode_time', 3)
+                    }
                 }).catch(error => {
                     this.$vux.alert.show({
                         title: '错误',
                         content: '请求错误'
                     })
                     console.log(error)
-                    this.disabled = false
                     this.$set(this, 'vcode_time', 3)
                 })
             },
@@ -83,21 +96,33 @@
                     return
                 }
                 this.disabled = true
-                this.get(this.api + 'api/index/Article', {
-                    limit: 10,
-                    classify: 1,
-                    page: 1,
-                    order: 1
+                this.post(this.api + 'api/action/Bind', {
+                    uid: this.user.uid,
+                    tel: this.tel,
+                    telcode: this.vcode
                 }).then(res => {
-                    let t = this
-                    this.$vux.alert.show({
-                        title: '成功',
-                        content: {name: this.name, tel: this.tel},
-                        onHide() {
-                            t.$router.go(-1)
-                        }
-                    })
-                    this.disabled = false
+                    let info = res.data
+                    if (info.code === '0') {
+                        this.user.mobile = this.tel
+                        this.User(this.user)
+                        this.$vux.alert.show({
+                            title: '成功',
+                            content: '绑定成功',
+                            onHide: function() {
+                                if (this.backurl) {
+                                    this.$router.replace(this.backurl)
+                                } else {
+                                    this.$router.replace('user')
+                                }
+                            }.bind(this)
+                        })
+                    } else {
+                        this.$vux.alert.show({
+                            title: '错误',
+                            content: info.msg
+                        })
+                        this.disabled = false
+                    }
                 }).catch(error => {
                     this.$vux.alert.show({
                         title: '错误',

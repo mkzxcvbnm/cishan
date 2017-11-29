@@ -50,6 +50,52 @@
             }
         },
         methods: {
+            wxsq() {
+                this.post(this.api + 'api/action/JsPay', {
+                    openid: this.user.openid,
+                    body: 'mk',
+                    total_fee: 1
+                }).then(res => {
+                    if (res.data.code === '0') {
+                        let info = JSON.parse(res.data.data)
+                        this.wxPay(info, res => {
+                            if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                                this.$vux.alert.show({
+                                    title: '成功',
+                                    content: '恭喜您，支付成功!更新可能会有延迟!',
+                                    onHide: function() {
+                                        this.$router.go(-1)
+                                    }.bind(this)
+                                })
+                            } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+                                this.$vux.alert.show({
+                                    title: '失败',
+                                    content: '取消支付'
+                                })
+                            } else {
+                                this.$vux.alert.show({
+                                    title: '失败',
+                                    content: '支付失败' + res.err_msg
+                                })
+                            }
+                        })
+                        // this.wxConfig(info, info => {
+                        //     this.$wechat.chooseWXPay({
+                        //         timestamp: info.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                        //         nonceStr: info.nonceStr, // 支付签名随机串，不长于 32 位
+                        //         package: info.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                        //         signType: info.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                        //         paySign: info.paySign, // 支付签名
+                        //         success: function (res) {
+                        //             console.log(res)
+                        //         }
+                        //     })
+                        // })
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
+            },
             pay() {
                 if (!this.agree.length) {
                     this.$vux.toast.show({
@@ -58,9 +104,62 @@
                     })
                     return
                 }
-                this.$vux.alert.show({
-                    title: '成功',
-                    content: '支付'
+                if (!this.user.mobile) {
+                    this.$vux.confirm.show({
+                        title: '通知',
+                        content: '您还没有验证手机号，立即前往验证',
+                        onConfirm: function() {
+                            this.$store.commit('BACKURL', this.$route.fullPath)
+                            this.$router.push({name: 'verifyPhone'})
+                        }.bind(this)
+                    })
+                    return
+                }
+                this.post(this.api + 'api/action/ApplyDz', {
+                    openid: this.user.openid,
+                    uid: this.user.uid,
+                    name: this.user.nikename,
+                    mobile: this.user.mobile,
+                    type: this.type,
+                    begin_time: Math.round(new Date().getTime() / 1000),
+                    total_fee: 300 * 100
+                }).then(res => {
+                    if (res.data.code === '0') {
+                        let info = JSON.parse(res.data.data)
+                        this.wxPay(info, res => {
+                            alert(JSON.stringify(res))
+                            if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                                this.$vux.alert.show({
+                                    title: '成功',
+                                    content: '恭喜您，支付成功!更新可能会有延迟!',
+                                    onHide: function() {
+                                        this.$router.go(-1)
+                                    }.bind(this)
+                                })
+                            } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+                                this.$vux.alert.show({
+                                    title: '失败',
+                                    content: '取消支付'
+                                })
+                            } else {
+                                this.$vux.alert.show({
+                                    title: '错误',
+                                    content: '支付失败' + res.err_msg
+                                })
+                            }
+                        })
+                    } else {
+                        this.$vux.alert.show({
+                            title: '失败',
+                            content: res.data.msg
+                        })
+                    }
+                }).catch(error => {
+                    this.$vux.alert.show({
+                        title: '错误',
+                        content: '请求错误'
+                    })
+                    console.log(error)
                 })
             }
         },

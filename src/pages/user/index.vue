@@ -3,9 +3,10 @@
         <div class="user_info">
             <router-link class="setting" to="/setting"></router-link>
             <div class="info">
-                <x-img :src="require('img/avatar.png')" :default-src="require('img/avatar.png')" class="avatar"></x-img>
-                <div class="name f18 pt5">PeterPan张三</div>
-                <div class="tel">138****5175</div>
+                <img :src="user.avatar ? user.avatar : require('img/avatar.png')" class="avatar">
+                <div class="name f18 pt5">{{user.nikename}}</div>
+                <div class="tel" v-if="user.mobile">{{user.mobile.toString().replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')}}</div>
+                <div class="tel" v-else>暂未绑定手机号码</div>
             </div>
         </div>
         <group class="mt15">
@@ -37,11 +38,10 @@
 </template>
 
 <script>
-    import { XImg, Group, Cell, Badge } from 'vux'
+    import { Group, Cell, Badge } from 'vux'
     export default {
         name: 'user',
         components: {
-            XImg,
             Group,
             Cell,
             Badge

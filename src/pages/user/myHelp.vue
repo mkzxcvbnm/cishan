@@ -18,6 +18,7 @@
 
 <script>
     import { dateFormat, LoadMore } from 'vux'
+    const _ = require('lodash/function')
     export default {
         name: 'chairFree',
         components: {
@@ -28,7 +29,7 @@
                 list: [],
                 loading: true,
                 params: {
-                    limit: 10,
+                    limit: false,
                     page: 1,
                     order: 1,
                     type: 'all'
@@ -37,7 +38,6 @@
         },
         computed: {
             scroll() {
-                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -54,13 +54,14 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.get(this.api + 'api/index/HelpItem', this.params).then(res => {
+                    this.get(this.api + 'api/index/MemberItem', {uid: this.user.uid, item: 'help'}).then(res => {
                         let info = res.data.data
                         info.forEach(item => {
                             this.list.push(item)
                         })
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.params.page = false
+                            this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
                             return
                         }
                         this.loading = true

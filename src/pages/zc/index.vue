@@ -77,14 +77,20 @@
                 </div>
             </div>
         </div>
-        <tabbar class="bbtn" v-if="sdata.id">
-            <tabbar-item>
-                <span class="ljjk" slot="label" @click="pay">立即捐款</span>
-            </tabbar-item>
-            <tabbar-item>
-                <span class="yqjk" slot="label">邀请好友一起捐款</span>
-            </tabbar-item>
-        </tabbar>
+        <transition
+        name="footer"
+        mode="out-in"
+        appear
+        >
+            <tabbar class="bbtn" v-if="sdata.id">
+                <tabbar-item>
+                    <span class="ljjk" slot="label" @click="pay">立即捐款</span>
+                </tabbar-item>
+                <tabbar-item>
+                    <span class="yqjk" slot="label">邀请好友一起捐款</span>
+                </tabbar-item>
+            </tabbar>
+        </transition>
         <mk-rbtn></mk-rbtn>
     </div>
 </template>
@@ -211,6 +217,9 @@
     }
     .zc {
         font-size: 14px;
+        .footer-enter-active, .footer-leave-active {
+            transition: all 1s;
+        }
         .bbtn {
             background-color: #fff;
             padding: 20px 4%;

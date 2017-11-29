@@ -2,8 +2,7 @@ import Vue from 'vue'
 import { AjaxPlugin } from 'vux'
 import { mapState, mapActions } from 'vuex'
 const mk = {
-    env: process.env.NODE_ENV,
-    api: this.env === 'production' ? '//api.jiujiu99.net/' : '',
+    api: process.env.NODE_ENV === 'development' ? '' : '//api.jiujiu99.net/',
     transfer: new Vue(),
     post(url, data = {}) {
         return AjaxPlugin.$http({
@@ -40,6 +39,46 @@ const mk = {
             return v.valid
         })
         return key
+    },
+    wxPay(data, callback) {
+        const jsApiCall = () => {
+            window.WeixinJSBridge.invoke('getBrandWCPayRequest', {
+                appId: data.appId,
+                nonceStr: data.nonceStr,
+                package: data.package,
+                paySign: data.paySign,
+                signType: data.signType,
+                timeStamp: data.timeStamp
+            }, res => {
+                callback(res)
+            })
+        }
+        if (typeof window.WeixinJSBridge === 'undefined') {
+            if (document.addEventListener) {
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false)
+            } else if (document.attachEvent) {
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall)
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall)
+            }
+        } else {
+            jsApiCall(data)
+        }
+    },
+    wxConfig(data, callback) {
+        Vue.wechat.config({
+            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: data.appId, // 必填，公众号的唯一标识
+            timestamp: data.timeStamp, // 必填，生成签名的时间戳
+            nonceStr: data.nonceStr, // 必填，生成签名的随机串
+            signature: data.signature, // 必填，签名，见附录1
+            jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        })
+        Vue.wechat.ready(function() {
+            callback()
+        })
+        Vue.wechat.error(function(res) {
+            // console.log('wxConfig_error: ' + res)
+        })
     }
 }
 export default {
@@ -57,13 +96,15 @@ export default {
         Vue.mixin({
             computed: {
                 ...mapState([
-                    'data'
+                    'data',
+                    'user'
                 ])
             },
             methods: {
                 ...mapActions([
                     'Data',
-                    'PushData'
+                    'PushData',
+                    'User'
                 ])
             },
             created: function () {

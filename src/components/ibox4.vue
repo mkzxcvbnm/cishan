@@ -68,6 +68,7 @@
                     this.get(info.url, info.params).then(res => {
                         this.$set(info, 'list', res.data.data)
                         this.$set(info, 'loading', -1)
+                        this.$refs.sticky.bindSticky()
                     })
                 }
             }

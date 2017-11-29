@@ -85,20 +85,29 @@
                     return
                 }
                 this.disabled = true
-                this.get(this.api + 'api/index/Article', {
-                    limit: 10,
-                    classify: 1,
-                    page: 1,
-                    order: 1
+                this.post(this.api + 'api/action/ApplyZs', {
+                    uid: this.user.uid,
+                    name: this.name,
+                    mobile: this.tel,
+                    address: this.address,
+                    depict: this.content,
+                    begin_time: Math.round(new Date().getTime() / 1000),
+                    type: this.type
                 }).then(res => {
-                    let t = this
-                    this.$vux.alert.show({
-                        title: '成功',
-                        content: {name: this.name, tel: this.tel},
-                        onHide() {
-                            t.$router.go(-1)
-                        }
-                    })
+                    if (res.code === '0') {
+                        this.$vux.alert.show({
+                            title: '成功',
+                            content: '申请成功，等待审核',
+                            onHide: function() {
+                                this.$router.go(-1)
+                            }.bind(this)
+                        })
+                    } else {
+                        this.$vux.alert.show({
+                            title: '错误',
+                            content: res.msg
+                        })
+                    }
                     this.disabled = false
                 }).catch(error => {
                     this.$vux.alert.show({

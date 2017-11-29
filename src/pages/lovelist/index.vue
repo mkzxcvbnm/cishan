@@ -11,8 +11,8 @@
                 <span>捐赠金额</span>
             </div>
             <div class="list_item center_box between border_t" v-for="(item, index) in list" :key="index">
-                <span class="name">{{item.title}}</span>
-                <span class="color">¥{{item.title}}</span>
+                <span class="name">{{item.nikename}}</span>
+                <span class="color">¥{{item.money}}</span>
             </div>
         </div>
         <div class="more" v-if="params.page" @click="getlist">
@@ -44,8 +44,7 @@
                 params: {
                     limit: 10,
                     page: 1,
-                    order: 1,
-                    classify: 'all'
+                    order: 1
                 }
             }
         },
@@ -53,7 +52,7 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.get(this.api + 'api/index/Article', this.params).then(res => {
+                    this.get(this.api + 'api/index/LoveItem', this.params).then(res => {
                         let info = res.data.data
                         info.forEach(item => {
                             this.list.push(item)
@@ -69,6 +68,7 @@
             }
         },
         created() {
+            this.Data({title: '爱心榜'})
             this.getlist()
         }
     }

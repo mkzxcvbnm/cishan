@@ -8,6 +8,9 @@ import App from './App'
 import { AjaxPlugin, AlertPlugin, ConfirmPlugin, ToastPlugin, WechatPlugin } from 'vux'
 import 'font-awesome/css/font-awesome.css'
 import mk from 'js/mk'
+import axios from 'axios'
+
+axios.defaults.withCredentials = true
 
 AjaxPlugin.$http.interceptors.request.use(config => {
     return config;
@@ -28,7 +31,9 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach((to) => {
-    store.commit('ISLOADING', false)
+    if (store.state.user.openid) {
+        store.commit('ISLOADING', false)
+    }
 })
 
 window.addEventListener('popstate', function(e) {

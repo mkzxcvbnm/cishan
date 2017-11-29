@@ -7,13 +7,16 @@
                 <div class="weui-form-preview__bd">
                     <div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">申请产品：</label>
-                        <span class="weui-form-preview__value">{{love_type[params.type]}}</span>
+                        <span class="weui-form-preview__value">{{['', '拐杖', '轮椅'][item.type]}}</span>
                     </div>
                     <div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">申请时间：</label>
-                        <span class="weui-form-preview__value">{{dateFormat(item.create_time * 1000, 'YYYY年MM月DD日')}}</span>
+                        <span class="weui-form-preview__value">{{dateFormat(item.begin_time * 1000, 'YYYY年MM月DD日')}}</span>
                     </div>
-                    <template v-if="Math.random() > 0.5">
+                    <template v-if="item.classify === 1">
+                        <x-button class="mt10 mb10" type="primary" mini @click.native="return_payment(item)">退还轮椅（押金）</x-button>
+                    </template>
+                    <template v-else>
                         <div class="weui-form-preview__item">
                             <label class="weui-form-preview__label">申请原因：</label>
                             <span class="weui-form-preview__value">{{item.depict}}</span>
@@ -21,9 +24,6 @@
                         <div class="pbox3_list_reply">回复：您提交的申请已收到，我们会尽快派志愿者上门走访核实</div>
                         <div class="pbox3_list_result">申请结果：{{['审核中', '符合', '不符合'][item['status']]}}</div>
                         <div class="pbox3_list_result" v-if="item.mark">原因：{{item.mark}}</div>
-                    </template>
-                    <template v-else>
-                        <x-button class="mt10 mb10" type="primary" mini @click.native="return_payment(item)">退还轮椅（押金）</x-button>
                     </template>
                 </div>
             </div>
@@ -36,6 +36,7 @@
 <script>
     import { mapState } from 'vuex'
     import { FormPreview, LoadMore, dateFormat, XButton } from 'vux'
+    const _ = require('lodash/function')
     export default {
         name: 'myApply',
         components: {
@@ -48,9 +49,9 @@
                 list: [],
                 loading: true,
                 params: {
-                    limit: 6,
+                    limit: false,
                     page: 1,
-                    type: this.$route.params.type
+                    type: ['', 'lovegz', 'lovely'][this.$route.params.type]
                 }
             }
         },
@@ -59,7 +60,6 @@
                 'love_type'
             ]),
             scroll() {
-                const _ = require('lodash/function')
                 let viewBox = this.data.scrollBox
                 let view = viewBox.getScrollBody()
                 return _.throttle(() => {
@@ -76,22 +76,14 @@
             getlist() {
                 if (this.loading) {
                     this.loading = false
-                    this.get(this.api + 'api/index/ZsApply', this.params).then(res => {
+                    this.get(this.api + 'api/index/MemberItem', {uid: this.user.uid, item: ['', 'lovegz', 'lovely'][this.$route.params.type]}).then(res => {
                         let info = res.data.data
-                        info.forEach(item => {
-                            this.list.push(item)
-                        })
-                        info.forEach(item => {
-                            this.list.push(item)
-                        })
-                        info.forEach(item => {
-                            this.list.push(item)
-                        })
                         info.forEach(item => {
                             this.list.push(item)
                         })
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.$set(this.params, 'page', false)
+                            this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
                             return
                         }
                         this.$set(this.params, 'page', this.params.page + 1)
@@ -100,21 +92,33 @@
                 }
             },
             return_payment(item) {
-                let t = this
                 this.$vux.confirm.show({
                     title: '通知',
-                    content: '您确定退还' + this.love_type[this.params.type] + '吗，工作人员收到您的反馈后会在5个工作日内处理',
-                    onConfirm () {
-                        t.$vux.alert.show({
-                            title: '通知',
-                            content: '退还押金'
+                    content: '您确定退还' + this.love_type[this.$route.params.type] + '吗，工作人员收到您的反馈后会在5个工作日内处理',
+                    onConfirm: function() {
+                        this.post(this.api + 'api/action/GiveBack', {uid: this.user.uid, id: item.id}).then(res => {
+                            let info = res.data.data
+                            if (info.code === 0) {
+                                this.$vux.alert.show({
+                                    title: '成功',
+                                    content: '退还成功',
+                                    onHide: function() {
+                                        this.$router.go(0)
+                                    }.bind(this)
+                                })
+                            } else {
+                                this.$vux.alert.show({
+                                    title: '失败',
+                                    content: '退还失败'
+                                })
+                            }
                         })
-                    }
+                    }.bind(this)
                 })
             }
         },
         created() {
-            this.Data({title: this.love_type[this.params.type] + '申请'})
+            this.Data({title: this.love_type[this.$route.params.type] + '申请'})
             this.getlist()
             this.$nextTick(() => {
                 this.data.scrollBox.getScrollBody().addEventListener('scroll', this.scroll)

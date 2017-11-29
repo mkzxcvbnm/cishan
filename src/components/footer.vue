@@ -1,31 +1,37 @@
 <template>
-    <div class="footer" :class="{footer_none: data.showFoot === false}">
-        <tabbar>
-            <tabbar-item :selected="to.path === '/'" link="/">
-                <img slot="icon" src="~img/icon_nav1.png">
-                <img slot="icon-active" src="~img/icon_nav1a.png">
-                <span slot="label">首页</span>
-            </tabbar-item>
-            <tabbar-item :selected="to.path === '/news/2'" link="/news/2">
-                <img slot="icon" src="~img/icon_nav2.png">
-                <img slot="icon-active" src="~img/icon_nav2a.png">
-                <span slot="label">动态</span>
-            </tabbar-item>
-            <tabbar-item icon-class="icon_navc">
-                <img slot="icon" src="~img/icon_navc.png">
-                <span slot="label">关注</span>
-            </tabbar-item>
-            <tabbar-item :selected="to.path === '/help'" link="/help">
-                <img slot="icon" src="~img/icon_nav3.png">
-                <img slot="icon-active" src="~img/icon_nav3a.png">
-                <span slot="label">求助</span>
-            </tabbar-item>
-            <tabbar-item :selected="to.path === '/user'" link="/user">
-                <img slot="icon" src="~img/icon_nav4.png">
-                <img slot="icon-active" src="~img/icon_nav4a.png">
-                <span slot="label">我的</span>
-            </tabbar-item>
-        </tabbar>
+    <div class="footer">
+        <transition
+        name="footer"
+        mode="out-in"
+        appear
+        >
+            <tabbar v-show="data.showFoot">
+                <tabbar-item :selected="to.path === '/'" link="/">
+                    <img slot="icon" src="~img/icon_nav1.png">
+                    <img slot="icon-active" src="~img/icon_nav1a.png">
+                    <span slot="label">首页</span>
+                </tabbar-item>
+                <tabbar-item :selected="to.path === '/news/2'" link="/news/2">
+                    <img slot="icon" src="~img/icon_nav2.png">
+                    <img slot="icon-active" src="~img/icon_nav2a.png">
+                    <span slot="label">动态</span>
+                </tabbar-item>
+                <tabbar-item icon-class="icon_navc">
+                    <img slot="icon" src="~img/icon_navc.png">
+                    <span slot="label">关注</span>
+                </tabbar-item>
+                <tabbar-item :selected="to.path === '/help'" link="/help">
+                    <img slot="icon" src="~img/icon_nav3.png">
+                    <img slot="icon-active" src="~img/icon_nav3a.png">
+                    <span slot="label">求助</span>
+                </tabbar-item>
+                <tabbar-item :selected="to.path === '/user'" link="/user">
+                    <img slot="icon" src="~img/icon_nav4.png">
+                    <img slot="icon-active" src="~img/icon_nav4a.png">
+                    <span slot="label">我的</span>
+                </tabbar-item>
+            </tabbar>
+        </transition>
     </div>
 </template>
 <script>
@@ -50,15 +56,7 @@
 </script>
 <style lang="scss">
     .footer {
-        &.footer_none {
-            .weui-tabbar {
-                opacity: 0;
-                transform: translate3d(0, 150%, 0);
-            }
-        }
         .weui-tabbar {
-            will-change: transform;
-            transition: all .5s;
             box-shadow: 0 -5px 25px #ccc;
         }
         .weui-tabbar__item {

@@ -26,7 +26,7 @@
                 <x-textarea placeholder="请输入真实的困难情况和具体求助内容，尽量详细描述" ref="content" v-model="content" v :show-counter="false" :rows="5" autosize></x-textarea>
             </group>
             <div class="mt25 mb20">
-                <x-button text="提交" :disabled="disabled" @click.native="submit" type="primary"></x-button>
+                <x-button text="提交" :disabled="disabled || !name || !tel || !content" @click.native="submit" type="primary"></x-button>
             </div>
             <div class="help_list">
                 <div class="tit">
@@ -67,12 +67,12 @@
         data() {
             return {
                 type_list: [
-                    {key: 1, value: '助学求助'},
-                    {key: 2, value: '轮椅求助'},
-                    {key: 3, value: '心愿求助'},
-                    {key: 4, value: '其他求助'}
+                    {key: 0, value: '助学求助'},
+                    {key: 1, value: '轮椅求助'},
+                    {key: 2, value: '心愿求助'},
+                    {key: 3, value: '其他求助'}
                 ],
-                type: 1,
+                type: 0,
                 name: null,
                 tel: null,
                 content: null,
@@ -129,20 +129,28 @@
                     return
                 }
                 this.disabled = true
-                this.get(this.api + 'api/index/Article', {
-                    limit: 10,
-                    classify: 1,
-                    page: 1,
-                    order: 1
+                this.post(this.api + 'api/action/HelpDo', {
+                    uid: this.user.uid,
+                    type: this.type,
+                    name: this.name,
+                    mobile: this.tel,
+                    content: this.content
                 }).then(res => {
-                    let t = this
-                    this.$vux.alert.show({
-                        title: '成功',
-                        content: {name: this.name, tel: this.tel},
-                        onHide() {
-                            t.$router.go(-1)
-                        }
-                    })
+                    let info = res.data
+                    if (info.code === '0') {
+                        this.$vux.alert.show({
+                            title: '成功',
+                            content: '发布求助成功',
+                            onHide: function() {
+                                this.$router.go(0)
+                            }.bind(this)
+                        })
+                    } else {
+                        this.$vux.alert.show({
+                            title: '错误',
+                            content: info.msg
+                        })
+                    }
                     this.disabled = false
                 }).catch(error => {
                     this.$vux.alert.show({
