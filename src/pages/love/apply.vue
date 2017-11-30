@@ -22,7 +22,7 @@
         </div>
         <div class="interval"></div>
         <mk-ibox3></mk-ibox3>
-        <noticePopup :showDialog="showDialog" @on-change="v => showDialog = v"></noticePopup>
+        <noticePopup :id="1" :showDialog="showDialog" @on-change="v => showDialog = v"></noticePopup>
     </div>
 </template>
 

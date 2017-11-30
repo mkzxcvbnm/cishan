@@ -158,7 +158,7 @@
                         hf.params.page++
                         if (!info.length || !hf.params.limit || info.length < hf.params.limit) {
                             hf.params.page = false
-                            return
+                            return false
                         }
                     })
                 }

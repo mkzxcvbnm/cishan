@@ -21,10 +21,7 @@
         </div>
         <div class="interval"></div>
         <div class="font border_b">
-            益起·微马全国系列公益跑”活动，是中华全国体育基
-            金会和微马体育基金会共同创办的。主办方计划在全国
-            百个城市开展公益跑活动，其目的是通过活动鼓励更多
-            的人参与跑步运动，推动全民健身。
+            {{this.notice}}
         </div>
     </div>
 </template>
@@ -45,7 +42,11 @@
                     limit: 10,
                     page: 1,
                     order: 1
-                }
+                },
+                notice: `益起·微马全国系列公益跑”活动，是中华全国体育基
+                        金会和微马体育基金会共同创办的。主办方计划在全国
+                        百个城市开展公益跑活动，其目的是通过活动鼓励更多
+                        的人参与跑步运动，推动全民健身。`
             }
         },
         methods: {
@@ -61,7 +62,7 @@
                         this.params.page++
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.params.page = false
-                            return
+                            return false
                         }
                     })
                 }
@@ -70,6 +71,10 @@
         created() {
             this.Data({title: '爱心榜'})
             this.getlist()
+            this.get(this.api + 'api/index/Notice', {id: 3}).then(res => {
+                let info = res.data.data
+                this.$set(this, 'notice', info)
+            })
         }
     }
 </script>

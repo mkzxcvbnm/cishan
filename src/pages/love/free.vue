@@ -68,21 +68,21 @@
                         type: 'warn',
                         text: '需要同意协议'
                     })
-                    return
+                    return false
                 }
                 if (!this.validation([this.$refs.name, this.$refs.tel, this.$refs.address])) {
                     this.$vux.toast.show({
                         type: 'warn',
                         text: '请填写正确'
                     })
-                    return
+                    return false
                 }
                 if (this.content === null) {
                     this.$vux.toast.show({
                         type: 'warn',
                         text: '请填写困难情况'
                     })
-                    return
+                    return false
                 }
                 this.disabled = true
                 this.post(this.api + 'api/action/ApplyZs', {
@@ -94,7 +94,8 @@
                     begin_time: Math.round(new Date().getTime() / 1000),
                     type: this.type
                 }).then(res => {
-                    if (res.code === '0') {
+                    let info = res.data.data
+                    if (res.data.code === '0') {
                         this.$vux.alert.show({
                             title: '成功',
                             content: '申请成功，等待审核',
@@ -105,7 +106,7 @@
                     } else {
                         this.$vux.alert.show({
                             title: '错误',
-                            content: res.msg
+                            content: info.msg
                         })
                     }
                     this.disabled = false

@@ -50,7 +50,7 @@
                     if (!info.length || !this.params.limit || info.length < this.params.limit) {
                         this.$set(this.params, 'page', false)
                         this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
-                        return
+                        return false
                     }
                     this.$set(this.params, 'page', this.params.page + 1)
                     this.loading = true

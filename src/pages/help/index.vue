@@ -2,11 +2,7 @@
     <div class="chairFree">
         <div class="center">
             <div class="font">
-                以前每逢夏季，村民就淌水过河，冬季则搭着简
-                易浮桥。2006年村民听说要修高一座便民桥了甭
-                提多高兴，谁知修了一半却停下了。由于是修建
-                高速公路辅助工程，去年高速公路就已经通车了，
-                而留下半截桥却无人问津。
+                {{this.notice}}
             </div>
             <checker
             class="between"
@@ -84,7 +80,12 @@
                     page: 1,
                     order: 1,
                     type: 'all'
-                }
+                },
+                notice: `以前每逢夏季，村民就淌水过河，冬季则搭着简
+                易浮桥。2006年村民听说要修高一座便民桥了甭
+                提多高兴，谁知修了一半却停下了。由于是修建
+                高速公路辅助工程，去年高速公路就已经通车了，
+                而留下半截桥却无人问津。`
             }
         },
         computed: {
@@ -108,7 +109,7 @@
                         this.params.page++
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.params.page = false
-                            return
+                            return false
                         }
                     })
                 }
@@ -119,14 +120,14 @@
                         type: 'warn',
                         text: '请填写正确'
                     })
-                    return
+                    return false
                 }
                 if (this.content === null) {
                     this.$vux.toast.show({
                         type: 'warn',
                         text: '请填写困难情况'
                     })
-                    return
+                    return false
                 }
                 this.disabled = true
                 this.post(this.api + 'api/action/HelpDo', {
@@ -165,6 +166,10 @@
         created() {
             this.Data({title: '我要求助'})
             this.getlist()
+            this.get(this.api + 'api/index/Notice', {id: 2}).then(res => {
+                let info = res.data.data
+                this.$set(this, 'notice', info)
+            })
         }
     }
 </script>

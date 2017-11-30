@@ -19,7 +19,7 @@
             <a class="check_btn" href="javascript:;">查看协议</a>
         </div>
         <div class="center mt20">
-            <x-button text="微信支付" @click.native="pay" type="primary"></x-button>
+            <x-button text="微信支付" :disabled="!(money > 0)" @click.native="pay" type="primary"></x-button>
         </div>
     </div>
 </template>
@@ -37,7 +37,7 @@
         },
         data() {
             return {
-                money: 300,
+                money: null,
                 agree: []
             }
         },
@@ -50,59 +50,59 @@
             }
         },
         methods: {
-            wxsq() {
-                this.post(this.api + 'api/action/JsPay', {
-                    openid: this.user.openid,
-                    body: 'mk',
-                    total_fee: 1
-                }).then(res => {
-                    if (res.data.code === '0') {
-                        let info = JSON.parse(res.data.data)
-                        this.wxPay(info, res => {
-                            if (res.err_msg === 'get_brand_wcpay_request:ok') {
-                                this.$vux.alert.show({
-                                    title: '成功',
-                                    content: '恭喜您，支付成功!更新可能会有延迟!',
-                                    onHide: function() {
-                                        this.$router.go(-1)
-                                    }.bind(this)
-                                })
-                            } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
-                                this.$vux.alert.show({
-                                    title: '失败',
-                                    content: '取消支付'
-                                })
-                            } else {
-                                this.$vux.alert.show({
-                                    title: '失败',
-                                    content: '支付失败' + res.err_msg
-                                })
-                            }
-                        })
-                        // this.wxConfig(info, info => {
-                        //     this.$wechat.chooseWXPay({
-                        //         timestamp: info.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-                        //         nonceStr: info.nonceStr, // 支付签名随机串，不长于 32 位
-                        //         package: info.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-                        //         signType: info.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                        //         paySign: info.paySign, // 支付签名
-                        //         success: function (res) {
-                        //             console.log(res)
-                        //         }
-                        //     })
-                        // })
-                    }
-                }).catch(error => {
-                    console.log(error)
-                })
-            },
+            // wxsq() {
+            //     this.post(this.api + 'api/action/JsPay', {
+            //         openid: this.user.openid,
+            //         body: 'mk',
+            //         total_fee: 1
+            //     }).then(res => {
+            //         if (res.data.code === '0') {
+            //             let info = JSON.parse(res.data.data)
+            //             this.wxPay(info, res => {
+            //                 if (res.err_msg === 'get_brand_wcpay_request:ok') {
+            //                     this.$vux.alert.show({
+            //                         title: '成功',
+            //                         content: '恭喜您，支付成功!更新可能会有延迟!',
+            //                         onHide: function() {
+            //                             this.$router.go(-1)
+            //                         }.bind(this)
+            //                     })
+            //                 } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+            //                     this.$vux.alert.show({
+            //                         title: '失败',
+            //                         content: '取消支付'
+            //                     })
+            //                 } else {
+            //                     this.$vux.alert.show({
+            //                         title: '失败',
+            //                         content: '支付失败' + res.err_msg
+            //                     })
+            //                 }
+            //             })
+            //             // this.wxConfig(info, info => {
+            //             //     this.$wechat.chooseWXPay({
+            //             //         timestamp: info.timeStamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+            //             //         nonceStr: info.nonceStr, // 支付签名随机串，不长于 32 位
+            //             //         package: info.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+            //             //         signType: info.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+            //             //         paySign: info.paySign, // 支付签名
+            //             //         success: function (res) {
+            //             //             console.log(res)
+            //             //         }
+            //             //     })
+            //             // })
+            //         }
+            //     }).catch(error => {
+            //         console.log(error)
+            //     })
+            // },
             pay() {
                 if (!this.agree.length) {
                     this.$vux.toast.show({
                         type: 'warn',
                         text: '需要同意协议'
                     })
-                    return
+                    return false
                 }
                 if (!this.user.mobile) {
                     this.$vux.confirm.show({
@@ -113,7 +113,7 @@
                             this.$router.push({name: 'verifyPhone'})
                         }.bind(this)
                     })
-                    return
+                    return false
                 }
                 this.post(this.api + 'api/action/ApplyDz', {
                     openid: this.user.openid,
@@ -122,12 +122,11 @@
                     mobile: this.user.mobile,
                     type: this.type,
                     begin_time: Math.round(new Date().getTime() / 1000),
-                    total_fee: 300 * 100
+                    total_fee: this.money * 100
                 }).then(res => {
                     if (res.data.code === '0') {
                         let info = JSON.parse(res.data.data)
                         this.wxPay(info, res => {
-                            alert(JSON.stringify(res))
                             if (res.err_msg === 'get_brand_wcpay_request:ok') {
                                 this.$vux.alert.show({
                                     title: '成功',
@@ -144,7 +143,7 @@
                             } else {
                                 this.$vux.alert.show({
                                     title: '错误',
-                                    content: '支付失败' + res.err_msg
+                                    content: '支付失败: ' + res.errMsg
                                 })
                             }
                         })
@@ -165,6 +164,10 @@
         },
         created() {
             this.Data({title: '爱心' + this.love_type[this.type] + '申请-支付押金'})
+            this.get(this.api + 'api/index/Dzprice', {tid: this.type}).then(res => {
+                let info = res.data.data
+                this.$set(this, 'money', info.price)
+            })
         }
     }
 </script>

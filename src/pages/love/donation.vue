@@ -40,21 +40,21 @@
                         type: 'warn',
                         text: '请填写正确'
                     })
-                    return
+                    return false
                 }
                 // if (this.name === null || this.tel === null || this.num === null) {
                 //     this.$vux.toast.show({
                 //         type: 'warn',
                 //         text: '请输入完整'
                 //     })
-                //     return
+                //     return false
                 // }
                 // if (!this.tel.match(/^1\d{10}$/)) {
                 //     this.$vux.toast.show({
                 //         type: 'warn',
                 //         text: '手机号码错误'
                 //     })
-                //     return
+                //     return false
                 // }
                 if (this.num === '0' || !this.num.match(/^\d+$/)) {
                     this.$vux.toast.show({
@@ -64,7 +64,7 @@
                             this.$refs.num.focus()
                         }.bind(this)
                     })
-                    return
+                    return false
                 }
                 this.disabled = true
                 this.post(this.api + 'api/action/GiveDo', {

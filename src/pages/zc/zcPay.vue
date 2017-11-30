@@ -55,11 +55,50 @@
         },
         methods: {
             pay() {
-                if (this.money_num(this.money)['valid'] && this.money) {
-                    this.$vux.alert.show({
-                        title: '提示',
-                        content: '支付',
-                        buttonText: '我知道了'
+                if (this.money_num(this.money)['valid'] && this.money > 0) {
+                    this.post(this.api + 'api/action/ZcDo', {
+                        openid: this.user.openid,
+                        nikename: this.user.nikename,
+                        uid: this.user.uid,
+                        tid: this.$route.params.id,
+                        total_fee: this.money * 100,
+                        content: this.text ? this.text : this.user.nikename + '献出爱心' + this.money + '元'
+                    }).then(res => {
+                        if (res.data.code === '0') {
+                            let info = JSON.parse(res.data.data)
+                            this.wxPay(info, res => {
+                                if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                                    this.$vux.alert.show({
+                                        title: '成功',
+                                        content: '恭喜您，支付成功!更新可能会有延迟!',
+                                        onHide: function() {
+                                            this.$router.go(-1)
+                                        }.bind(this)
+                                    })
+                                } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+                                    this.$vux.alert.show({
+                                        title: '失败',
+                                        content: '取消支付'
+                                    })
+                                } else {
+                                    this.$vux.alert.show({
+                                        title: '错误',
+                                        content: '支付失败: ' + res.errMsg
+                                    })
+                                }
+                            })
+                        } else {
+                            this.$vux.alert.show({
+                                title: '失败',
+                                content: res.data.msg
+                            })
+                        }
+                    }).catch(error => {
+                        this.$vux.alert.show({
+                            title: '错误',
+                            content: '请求错误'
+                        })
+                        console.log(error)
                     })
                 } else {
                     this.$vux.alert.show(this.money ? '请输入正确的金额' : '请输入金额')

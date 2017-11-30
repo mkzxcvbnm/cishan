@@ -55,17 +55,20 @@
     .ibox2 {
         margin-bottom: -1px;
         .vux-flexbox-item {
+            span {
+                white-space: nowrap;
+            }
             &:nth-of-type(odd) {
                 .ibox2_item {
                     padding-left: 8%;
-                    padding-right: 18px;
+                    padding-right: 8px;
                     border-right: 1px solid #f1f1f1;
                 }
             }
             &:nth-of-type(even) {
                 .ibox2_item {
                     padding-right: 8%;
-                    padding-left: 19px;
+                    padding-left: 8px;
                     img {
                         margin-right: 2px;
                     }

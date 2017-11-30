@@ -46,7 +46,7 @@
             getvcode() {
                 if (!this.tel || !this.tel.match(/^1\d{10}$/)) {
                     this.$vux.alert.show('手机号码错误')
-                    return;
+                    return false
                 }
                 this.vcode_time = 60
                 let timer = setInterval(() => {
@@ -86,14 +86,14 @@
                         title: '提示',
                         content: '手机号码错误'
                     })
-                    return;
+                    return false
                 }
                 if (!this.vcode) {
                     this.$vux.alert.show({
                         title: '提示',
                         content: '请输入验证码'
                     })
-                    return
+                    return false
                 }
                 this.disabled = true
                 this.post(this.api + 'api/action/Bind', {

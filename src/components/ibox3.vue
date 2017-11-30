@@ -102,6 +102,7 @@
         }
         .ibox3_tit_r {
             text-align: right;
+            white-space: nowrap;
             span {
                 color: $color;
             }

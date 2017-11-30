@@ -77,7 +77,7 @@
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.params.page = false
                             this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
-                            return
+                            return false
                         }
                         this.loading = true
                         this.params.page++

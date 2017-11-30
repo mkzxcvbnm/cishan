@@ -84,7 +84,7 @@
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
                             this.$set(this.params, 'page', false)
                             this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
-                            return
+                            return false
                         }
                         this.$set(this.params, 'page', this.params.page + 1)
                         this.loading = true
@@ -98,7 +98,7 @@
                     onConfirm: function() {
                         this.post(this.api + 'api/action/GiveBack', {uid: this.user.uid, id: item.id}).then(res => {
                             let info = res.data.data
-                            if (info.code === 0) {
+                            if (info.code === '0') {
                                 this.$vux.alert.show({
                                     title: '成功',
                                     content: '退还成功',

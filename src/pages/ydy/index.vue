@@ -23,7 +23,7 @@
                 <button @click="showDialog = true">认捐须知</button>
             </div>
             <ul class="pbox2_list">
-                <li :class="{isPledging: item.status === 1 || sdata.status === 2, isOp: item.op === 0}" v-for="(item, index) in list" :key="index" @click="scrollToStudent(item.id)">{{(Array(2).join(0) + (index+1)).slice(-2)}}.{{btnName1(item)}}</li>
+                <li :class="{isPledging: item.status === 1 || sdata.status === 2, isOp: item.op === 1}" v-for="(item, index) in list" :key="index" @click="scrollToStudent(item.id)">{{(Array(2).join(0) + (index+1)).slice(-2)}}.{{btnName1(item)}}</li>
             </ul>
         </div>
         <div class="interval"></div>
@@ -65,13 +65,13 @@
                     </div>
                     <div class="weui-form-preview__ft">
                         <router-link class="weui-form-preview__btn weui-form-preview__btn_default" :to="{ name: 'student', params: { id: item.id } }"><span>学生详情</span></a></router-link>
-                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" :class="{isPledging: item.status == 1 || sdata.status === 2}" href="javascript:" @click="pay(item)"><span>{{btnName2(item)}}</span></a>
+                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" :class="{isPledging: item.status === 1 || sdata.status === 2}" href="javascript:" @click="pay(item)"><span>{{btnName2(item)}}</span></a>
                     </div>
                 </div>
                 <!-- <form-preview class="pbox3_list_item" :class="[studentState(item)]" v-for="(item, index) in data['ydy_list' + id]" :key="index" :header-label="item.title" :header-value="item.id" :body-items="preview_list(item)" :footer-buttons="preview_btn(item)" name="demo"></form-preview> -->
             </div>
         </div>
-        <noticePopup :showDialog="showDialog" @on-change="v => showDialog = v"></noticePopup>
+        <noticePopup :id="0" :showDialog="showDialog" @on-change="v => showDialog = v"></noticePopup>
     </div>
 </template>
 
@@ -112,18 +112,18 @@
                 })
             },
             btnName1(item) {
-                if (item.op === 0) {
+                if (item.op === 1) {
                     return '已经被优先认捐'
-                } else if (item.anyone === 0) {
+                } else if (item.anyone === 1) {
                     return '已被匿名认捐'
                 } else {
                     return item.name
                 }
             },
             btnName2(item) {
-                if (item.op === 0) {
+                if (item.op === 1) {
                     return '已经被优先认捐'
-                } else if (item.anyone === 0) {
+                } else if (item.anyone === 1) {
                     return '该学生为匿名捐赠'
                 } else if (item.status === 0) {
                     return '我要认捐'
@@ -142,7 +142,47 @@
                     } else if (this.sdata.status === 2) {
                         this.$vux.alert.show('活动已结束')
                     } else {
-                        this.$vux.alert.show('付款')
+                        this.post(this.api + 'api/action/YdyDo', {
+                            uid: this.user.uid,
+                            openid: this.user.openid,
+                            id: this.$route.params.id
+                        }).then(res => {
+                            if (res.data.code === '0') {
+                                let info = JSON.parse(res.data.data)
+                                this.wxPay(info, res => {
+                                    if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                                        this.$vux.alert.show({
+                                            title: '成功',
+                                            content: '恭喜您，支付成功!更新可能会有延迟!',
+                                            onHide: function() {
+                                                this.$router.go(-1)
+                                            }.bind(this)
+                                        })
+                                    } else if (res.err_msg === 'get_brand_wcpay_request:cancel') {
+                                        this.$vux.alert.show({
+                                            title: '失败',
+                                            content: '取消支付'
+                                        })
+                                    } else {
+                                        this.$vux.alert.show({
+                                            title: '错误',
+                                            content: '支付失败: ' + res.errMsg
+                                        })
+                                    }
+                                })
+                            } else {
+                                this.$vux.alert.show({
+                                    title: '失败',
+                                    content: res.data.msg
+                                })
+                            }
+                        }).catch(error => {
+                            this.$vux.alert.show({
+                                title: '错误',
+                                content: '请求错误'
+                            })
+                            console.log(error)
+                        })
                     }
                 } else {
                     this.$vux.alert.show('该学生已被认捐')
