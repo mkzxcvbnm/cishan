@@ -13,19 +13,29 @@ import axios from 'axios'
 axios.defaults.withCredentials = true
 
 AjaxPlugin.$http.interceptors.request.use(config => {
-    return config;
+    return config
 }, error => {
-    return Promise.reject(error);
-});
+    return Promise.reject(error)
+})
 
 AjaxPlugin.$http.interceptors.response.use(response => {
-    return response;
+    return response
 }, error => {
-    return Promise.reject(error);
-});
+    return Promise.reject(error)
+})
+
+Vue.use(AjaxPlugin)
+Vue.use(AlertPlugin)
+Vue.use(ConfirmPlugin)
+Vue.use(ToastPlugin)
+Vue.use(WechatPlugin)
+Vue.use(mk)
+
+window.addEventListener('popstate', function(e) {
+    store.commit('ISBACK', true)
+}, false);
 
 router.beforeEach((to, from, next) => {
-    store.dispatch('Data', {showBack: to.path !== '/', showFoot: false})
     store.commit('ISLOADING', true)
     next()
 })
@@ -35,17 +45,6 @@ router.afterEach((to) => {
         store.commit('ISLOADING', false)
     }
 })
-
-window.addEventListener('popstate', function(e) {
-    store.commit('ISBACK', true)
-}, false);
-
-Vue.use(AjaxPlugin)
-Vue.use(AlertPlugin)
-Vue.use(ConfirmPlugin)
-Vue.use(ToastPlugin)
-Vue.use(WechatPlugin)
-Vue.use(mk)
 
 FastClick.attach(document.body)
 

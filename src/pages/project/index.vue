@@ -112,7 +112,9 @@
                             tab.list.push(item)
                         })
                         this.$nextTick(() => {
-                            this.$refs.scroller[index].reset()
+                            if (this.$refs.scroller[index]) {
+                                this.$refs.scroller[index].reset()
+                            }
                         })
                         if (!info.length || !params.limit || info.length < params.limit) {
                             this.$set(params, 'page', false)

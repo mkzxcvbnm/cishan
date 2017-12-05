@@ -7,7 +7,7 @@
             <cell title="姓名" is-link><span class="default mr20">{{user.nikename}}</span></cell>
             <cell>
                 <div slot="title">手机号<span class="default ml20" v-if="!user.mobile">暂未绑定手机号码</span></div>
-                <router-link class="color" slot="default" to="/verifyPhone">立即绑定</router-link>
+                <router-link class="color" slot="default" to="/verifyPhone">{{user.mobile ? user.mobile.toString().replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2') : '立即绑定'}}</router-link>
             </cell>
         </group>
     </div>

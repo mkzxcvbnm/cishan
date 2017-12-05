@@ -56,18 +56,26 @@
         methods: {
             pay() {
                 if (this.money_num(this.money)['valid'] && this.money > 0) {
-                    this.post(this.api + 'api/action/ZcDo', {
+                    this.post(this.api + 'api/action/jspay', {
                         openid: this.user.openid,
-                        nikename: this.user.nikename,
-                        uid: this.user.uid,
-                        tid: this.$route.params.id,
+                        body: '众筹捐款',
                         total_fee: this.money * 100,
-                        content: this.text ? this.text : this.user.nikename + '献出爱心' + this.money + '元'
+                        tid: this.$route.params.id,
+                        ido: 'zc'
                     }).then(res => {
                         if (res.data.code === '0') {
-                            let info = JSON.parse(res.data.data)
+                            let info = res.data.data
                             this.wxPay(info, res => {
                                 if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                                    this.post(this.api + 'api/action/ZcDo', {
+                                        openid: this.user.openid,
+                                        nikename: this.user.nikename,
+                                        uid: this.user.uid,
+                                        tid: this.$route.params.id,
+                                        total_fee: this.money * 100,
+                                        content: this.text ? this.text : this.user.nikename + '献出爱心' + this.money + '元',
+                                        order_num: info.order_num
+                                    })
                                     this.$vux.alert.show({
                                         title: '成功',
                                         content: '恭喜您，支付成功!更新可能会有延迟!',

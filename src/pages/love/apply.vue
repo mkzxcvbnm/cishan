@@ -3,7 +3,7 @@
         <img class="top_pic" src="~img/top_pic.jpg">
         <div class="love_box1 center_box bf">
             <p class="tit">丹阳市九九爱心社爱心{{love_type[type]}}申请</p>
-            <x-progress class="zc_progress" :percent="sdata.rs_num / sdata.num" :show-cancel="false"></x-progress>
+            <x-progress class="zc_progress" :percent="sdata.rs_num / sdata.num * 100" :show-cancel="false"></x-progress>
             <flexbox class="info" justify="space-between">
                 <flexbox-item>
                     总数：<span>{{sdata.num}}</span>
@@ -16,8 +16,8 @@
         <div class="apply_btn bf">
             <div class="fr">
                 <x-button mini @click.native="showDialog = true">申请需知</x-button>
-                <router-link :to="{ name: 'rent', params: { type: type } }"><x-button mini type="primary">申请短租</x-button></router-link>
-                <router-link :to="{ name: 'free', params: { type: type } }"><x-button mini type="warn">申请赠送</x-button></router-link>
+                <x-button mini type="primary" @click.native="link({ name: 'rent', params: { type: type } })">申请短租</x-button>
+                <x-button mini type="warn" @click.native="link({ name: 'free', params: { type: type } })">申请赠送</x-button>
             </div>
         </div>
         <div class="interval"></div>
@@ -53,6 +53,18 @@
             ]),
             type() {
                 return this.$route.params.type
+            }
+        },
+        methods: {
+            link(path) {
+                if (this.sdata.rs_num < this.sdata.num) {
+                    this.$router.push(path)
+                } else {
+                    this.$vux.alert.show({
+                        title: '提示',
+                        content: '总数不足'
+                    })
+                }
             }
         },
         created() {

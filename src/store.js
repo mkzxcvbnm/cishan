@@ -13,7 +13,7 @@ const state = {
     love_type: ['', '拐杖', '轮椅'],
     news_type: ['信息', '公告', '动态', '财务公开'],
     data: {
-        title: '丹阳市九爱心社区',
+        title: '丹阳市九九爱心社区',
         // sticky: false,
         showBack: true,
         showFoot: true,

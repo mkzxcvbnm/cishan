@@ -5,7 +5,7 @@
             <div class="info">
                 <img :src="user.avatar ? user.avatar : require('img/avatar.png')" class="avatar">
                 <div class="name f18 pt5">{{user.nikename}}</div>
-                <div class="tel" v-if="user.mobile">{{user.mobile.toString().replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')}}</div>
+                <div class="tel" v-if="user.mobile">{{!user.mobile ? '' : user.mobile.toString().replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')}}</div>
                 <div class="tel" v-else>暂未绑定手机号码</div>
             </div>
         </div>
@@ -31,7 +31,7 @@
         <group class="mt15">
             <cell title="我的求助" is-link link="/myHelp">
                 <img class="mr15 vam" slot="icon" width="21" src="~img/uicon4.png">
-                <badge text="1"></badge>
+                <badge v-show="user.read_num > 0" :text="user.read_num > 99 ? 99 : user.read_num"></badge>
             </cell>
         </group>
     </div>

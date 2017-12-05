@@ -58,7 +58,7 @@
                 </router-link>
             </flexbox-item>
             <flexbox-item :span="1/4">
-                <router-link to="/project">
+                <router-link to="/show/about">
                     <div class="ibox1_item">
                         <img src="~img/ibox1_8.png" width="48" height="48" alt="">
                         <p>关于我们</p>

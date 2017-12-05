@@ -2,7 +2,7 @@
     <div class="ydy bf" ref="ydy">
         <div v-if="sdata.status == 0" class="page_top state_0">
             <span class="page_top_l">预告中</span>
-            <span class="page_top_r">{{dateFormat(sdata.begin_time, 'MM月DD日 HH:mm')}} 开始</span>
+            <span class="page_top_r">{{dateFormat(sdata.begin_time * 1000, 'MM月DD日 HH:mm')}} 开始</span>
         </div>
         <div v-else-if="sdata.status == 1" class="page_top state_1">
             <span class="page_top_l">进行中</span>
@@ -23,7 +23,7 @@
                 <button @click="showDialog = true">认捐须知</button>
             </div>
             <ul class="pbox2_list">
-                <li :class="{isPledging: item.status === 1 || sdata.status === 2, isOp: item.op === 1}" v-for="(item, index) in list" :key="index" @click="scrollToStudent(item.id)">{{(Array(2).join(0) + (index+1)).slice(-2)}}.{{btnName1(item)}}</li>
+                <li :class="{isPledging: item.status === 1 || sdata.status !== 1, isOp: item.op === 1}" v-for="(item, index) in list" :key="index" @click="scrollToStudent(item.id)">{{(Array(2).join(0) + (index+1)).slice(-2)}}.{{btnName1(item)}}</li>
             </ul>
         </div>
         <div class="interval"></div>
@@ -64,8 +64,8 @@
                         </div>
                     </div>
                     <div class="weui-form-preview__ft">
-                        <router-link class="weui-form-preview__btn weui-form-preview__btn_default" :to="{ name: 'student', params: { id: item.id } }"><span>学生详情</span></a></router-link>
-                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" :class="{isPledging: item.status === 1 || sdata.status === 2}" href="javascript:" @click="pay(item)"><span>{{btnName2(item)}}</span></a>
+                        <a class="weui-form-preview__btn weui-form-preview__btn_default tal ml15" href="javascript:;" @click="student(item)"><span>学生详情</span></a>
+                        <a class="weui-form-preview__btn weui-form-preview__btn_primary tar mr15" :class="{isPledging: item.status === 1 || sdata.status !== 1}" href="javascript:" @click="pay(item)"><span>{{btnName2(item)}}</span></a>
                     </div>
                 </div>
                 <!-- <form-preview class="pbox3_list_item" :class="[studentState(item)]" v-for="(item, index) in data['ydy_list' + id]" :key="index" :header-label="item.title" :header-value="item.id" :body-items="preview_list(item)" :footer-buttons="preview_btn(item)" name="demo"></form-preview> -->
@@ -128,7 +128,18 @@
                 } else if (item.status === 0) {
                     return '我要认捐'
                 } else {
-                    return '已被' + item.uname.toString().substr(0, 3) + '认捐'
+                    return '已被' + (item.uname ? item.uname.toString().substr(0, 3) : '') + '认捐'
+                }
+            },
+            student(item) {
+                if (item.uid === this.user.uid) {
+                    this.$router.push({ name: 'student', params: { id: item.id } })
+                } else {
+                    this.$vux.alert.show({
+                        title: '通知',
+                        content: '认捐人才可以查看',
+                        buttonText: '我知道了'
+                    })
                 }
             },
             pay(item) {
@@ -141,16 +152,40 @@
                         })
                     } else if (this.sdata.status === 2) {
                         this.$vux.alert.show('活动已结束')
+                    } else if (!this.user.mobile) {
+                        this.$vux.confirm.show({
+                            title: '通知',
+                            content: '您还没有验证手机号，立即前往验证',
+                            onConfirm: function() {
+                                this.$store.commit('BACKURL', this.$route.fullPath)
+                                this.$router.push({name: 'verifyPhone'})
+                            }.bind(this)
+                        })
+                        return false
                     } else {
-                        this.post(this.api + 'api/action/YdyDo', {
-                            uid: this.user.uid,
+                        this.post(this.api + 'api/action/jspay', {
                             openid: this.user.openid,
-                            id: this.$route.params.id
+                            body: '一对一资助',
+                            total_fee: item.give_money * 100,
+                            tid: item.id,
+                            ido: 'ydy'
                         }).then(res => {
                             if (res.data.code === '0') {
-                                let info = JSON.parse(res.data.data)
+                                let info = res.data.data
                                 this.wxPay(info, res => {
                                     if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                                        this.$set(item, 'status', 1)
+                                        this.$set(item, 'uname', this.user.nikename)
+                                        this.post(this.api + 'api/action/YdyDo', {
+                                            openid: this.user.openid,
+                                            id: item.id,
+                                            uid: this.user.uid,
+                                            name: this.user.nikename,
+                                            mobile: this.user.mobile,
+                                            begin_time: Math.round(new Date().getTime() / 1000),
+                                            total_fee: item.give_money * 100,
+                                            order_num: info.order_num
+                                        })
                                         this.$vux.alert.show({
                                             title: '成功',
                                             content: '恭喜您，支付成功!更新可能会有延迟!',

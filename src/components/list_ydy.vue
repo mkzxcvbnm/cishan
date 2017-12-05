@@ -13,13 +13,13 @@
                             <span v-else-if="item.status == 2" class="type_end">已结束</span>
                             <span v-else>预告中</span>
                         </div>
-                        <div>还剩<span class="color_number">{{item.count_num - item.rs_num }}</span>个名额</div>
+                        <div v-if="item.status != 2">还剩<span class="color_number">{{item.count_num - item.rs_num }}</span>个名额</div>
                     </div>
                 </div>
                 <x-progress class="zz_list_progress" :percent="item.rs_num / item.count_num * 100" :show-cancel="false"></x-progress>
                 <div class="zz_list_info">
                     <div v-if="item.status == 1">
-                        <span>剩于时间：</span>
+                        <span>剩余时间：</span>
                         <clocker :time="dateFormat(item.end_time * 1000, 'YYYY-MM-DD HH:mm:ss')" @on-finish="item.status = 2">
                             <span>%H小时</span><span>%M分钟</span><span>%S秒</span>
                         </clocker>

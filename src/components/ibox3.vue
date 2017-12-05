@@ -17,7 +17,7 @@
                 <flexbox v-for="(item, index) in list" :key="index" class="ibox3_list_item center_box_full" :gutter="0" wrap="wrap" justify="space-around">
                         <flexbox-item :span="2/3">
                             <div class="ibox3_list_l">
-                                <span>{{item.name.toString().substr(0,1)+item.name.toString().substr(1).replace(/./g, '*')}}</span><span>{{item.mobile.toString().substr(0,4)+"****"+item.mobile.toString().substr(8)}}</span>
+                                <span>{{item.name.toString().substr(0,1)+item.name.toString().substr(1).replace(/./g, '*')}}</span><span>{{!user.mobile ? '' : (item.mobile.toString().substr(0,4) + "****" + item.mobile.toString().substr(8))}}</span>
                                 <p>已于{{item_date(item.begin_time)}}前&nbsp;&nbsp;&nbsp;成功申请{{item.type == 1 ? '拐杖' : '轮椅'}}</p>
                             </div>
                         </flexbox-item>

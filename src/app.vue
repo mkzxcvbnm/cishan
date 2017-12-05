@@ -7,6 +7,7 @@
         <view-box class="conditioner" :style="{opacity: user.openid ? 1 : 0}" ref="viewBox" body-padding-top="46px" body-padding-bottom="80px">
             <transition
             v-if="user.openid !== undefined"
+            @before-enter="beforeEnter"
             @after-enter="afterEnter"
             :name="'translateX-' + (isback ? 'out' : 'in')"
             appear
@@ -52,6 +53,9 @@
             }
         },
         methods: {
+            beforeEnter() {
+                this.$store.dispatch('Data', {showBack: this.to.path !== '/', showFoot: false})
+            },
             afterEnter() {
                 this.$store.commit('ISBACK', false)
                 if (array.findIndex(['zc'], o => { return o === this.to.name }) === -1) {
@@ -64,6 +68,8 @@
         },
         created() {
             sessionStorage.getUserInfoCount ? sessionStorage.getUserInfoCount++ : sessionStorage.getUserInfoCount = 1
+            // this.get(this.api + 'api/index/SiteInfo').then(res => {
+            //     res.data.data.openid = 1
             this.post(this.api + 'api/wxauth/getUserInfo').then(res => {
                 let info = res.data.data
                 if (res.data.code === '0' && info.openid !== null) {

@@ -2,7 +2,7 @@
     <div class="zc" ref="zc">
         <div v-if="sdata.status == 0" class="page_top state_0">
             <span class="page_top_l">预告中</span>
-            <span class="page_top_r">{{dateFormat(sdata.begin_time, 'MM月DD日 HH:mm')}} 开始</span>
+            <span class="page_top_r">{{dateFormat(sdata.begin_time * 1000, 'MM月DD日 HH:mm')}} 开始</span>
         </div>
         <div v-else-if="sdata.status == 1" class="page_top state_1">
             <span class="page_top_l">进行中</span>
@@ -15,7 +15,7 @@
         <div v-else class="page_top state_2">
             <span class="page_top_r">已结束，请关注其他项目</span>
         </div>
-        <img class="zc_pic" src="~img/banner.jpg" alt="">
+        <img class="zc_pic" :src="sdata.cover ? sdata.cover : require('img/banner.jpg')" alt="">
         <div class="zc_box1 center_box bf">
             <x-progress class="zc_progress" :percent="percent(sdata)" :show-cancel="false"></x-progress>
             <p>众筹进度：{{percent(sdata).toFixed(2)}}%</p>
@@ -48,9 +48,7 @@
             <div class="tit center_box">
                 项目详情
             </div>
-            <div class="content center_box">
-                {{sdata.depict}}
-            </div>
+            <div class="content center_box" v-html="sdata.details"></div>
         </div>
         <div class="interval"></div>
         <div class="zc_ly bf">
@@ -84,14 +82,17 @@
         >
             <tabbar class="bbtn" v-if="sdata.id">
                 <tabbar-item>
-                    <span class="ljjk" slot="label" @click="pay">立即捐款</span>
+                    <span :class="sdata.status !== 1 ? 'disabled' : 'ljjk'" slot="label" @click="pay">立即捐款</span>
                 </tabbar-item>
                 <tabbar-item>
-                    <span class="yqjk" slot="label">邀请好友一起捐款</span>
+                    <span class="yqjk" slot="label" @click="fx = true">邀请好友一起捐款</span>
                 </tabbar-item>
             </tabbar>
         </transition>
         <mk-rbtn></mk-rbtn>
+        <transition name="fade" mode="out-in" appear>
+            <div class="fx" v-show="fx" @click="fx = false"></div>
+        </transition>
     </div>
 </template>
 
@@ -121,12 +122,16 @@
                         limit: 4,
                         page: 1
                     }
-                }
+                },
+                fx: false
             }
         },
         computed: {
             id() {
                 return this.$route.params.id
+            },
+            tid() {
+                return this.$route.params.tid
             }
         },
         methods: {
@@ -173,13 +178,23 @@
                     })
                 } else if (sdata.status === 2) {
                     this.$vux.alert.show('活动已结束')
+                } else if (!this.user.mobile) {
+                    this.$vux.confirm.show({
+                        title: '通知',
+                        content: '您还没有验证手机号，立即前往验证',
+                        onConfirm: function() {
+                            this.$store.commit('BACKURL', this.$route.fullPath)
+                            this.$router.push({name: 'verifyPhone'})
+                        }.bind(this)
+                    })
+                    return false
                 } else {
                     this.$router.push({ name: 'zcPay', params: { id: sdata.id, quick_payment: sdata.quick_payment } })
                 }
             }
         },
         created() {
-            this.get(this.api + 'api/index/ZcShow', {id: this.id}).then(res => {
+            this.get(this.api + 'api/index/ZcShow', {id: this.id, tid: this.tid}).then(res => {
                 let info = res.data.data
                 this.Data({title: info.title})
                 this.$set(this, 'sdata', info)
@@ -189,6 +204,18 @@
                 this.$set(this, 'avatar', info)
             })
             this.getreply()
+            this.getWxConfig().then(config => {
+                this.wxConfig(config)
+                window.Vue.wechat.ready(() => {
+                    this.wxShare({
+                        site_indextitle: '“' + this.user.nikename + '”邀请您一起完成丹阳九九爱心轮椅资助项目',
+                        site_indexdesc: '我为这个公益项目发起筹款，相信世界的改变不因为少数人的很大努力，而因大多数人的一点点',
+                        site_indeximg: this.sdata.cover
+                    })
+                })
+            }).catch(error => {
+                console.log(error)
+            })
         }
     }
 </script>
@@ -240,8 +267,11 @@
             .yqjk {
                 background-color: #ff5a00;
             }
+            .disabled {
+                background-color: #bdbdbd;
+            }
             .weui-tabbar__item {
-                flex: 0;
+                flex: none;
             }
             .weui-tabbar__item.vux-tabbar-simple {
                 height: auto;
@@ -289,6 +319,7 @@
                 overflow: hidden;
                 ul {
                     width: 307.5px;
+                    max-width: 90%;
                     height: 42.5px;
                     overflow: hidden;
                     float: left;
@@ -304,7 +335,9 @@
                 .fa {
                     float: right;
                     font-size: 28px;
-                    margin-top: 2px;
+                    margin-top: 7px;
+                    width: 10%;
+                    text-align: right;
                 }
             }
         }
@@ -422,5 +455,14 @@
         &.state_2 {
             background: #afafaf;
         }
+    }
+    .fx {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 9999;
+        background: rgba(0,0,0,.5) url(~img/fx.png) no-repeat right top;
     }
 </style>

@@ -51,7 +51,7 @@ const router = new Router({
             component: student
         },
         {
-            path: '/zc/:id',
+            path: '/zc/:id/:tid',
             name: 'zc',
             component: zc
         },

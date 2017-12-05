@@ -393,6 +393,9 @@ button {
     }
 }
 body {
+    .weui-dialog {
+        border-radius: 10px;
+    }
     .vux-loading {
         position: relative;
         z-index: 999;

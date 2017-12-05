@@ -1,7 +1,7 @@
 <template>
     <div class="show bf">
         <div class="interval"></div>
-        <div class="show_tit center_box pt10 pb10 border_b">
+        <div class="show_tit center_box pt10 pb10 border_b" v-if="id > 0">
             <h1>{{sdata.title}}</h1>
             <div class="between">
                 <span>{{dateFormat(sdata.create_time * 1000, 'YYYY-MM-DD')}}</span>
@@ -20,6 +20,7 @@
         },
         data() {
             return {
+                id: this.$route.params.id,
                 sdata: {}
             }
         },
@@ -33,10 +34,18 @@
                 return dateFormat(time, format)
             },
             setSdata() {
-                this.get(this.api + 'api/index/ArticleShow', {id: this.$route.params.id}).then(res => {
-                    this.$set(this, 'sdata', res.data.data)
-                    this.Data({title: res.data.data.title})
-                })
+                console.log(this.id > 0)
+                if (this.id > 0) {
+                    this.get(this.api + 'api/index/ArticleShow', {id: this.id}).then(res => {
+                        this.$set(this, 'sdata', res.data.data)
+                        this.Data({title: res.data.data.title})
+                    })
+                } else {
+                    this.get(this.api + 'api/index/About').then(res => {
+                        this.$set(this.sdata, 'content', res.data.data)
+                        this.Data({title: '关于我们'})
+                    })
+                }
             }
         },
         created() {

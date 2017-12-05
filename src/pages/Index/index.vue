@@ -35,8 +35,26 @@
             return {
             }
         },
+        methods: {
+            siteInfo() {
+                return new Promise((resolve, reject) => {
+                    this.get(this.api + 'api/index/SiteInfo').then(res => {
+                        let info = res.data.data
+                        resolve(info)
+                    }).catch(error => {
+                        reject(error)
+                    })
+                })
+            }
+        },
         created() {
-            this.Data({title: '丹阳市九爱心社区'})
+            Promise.all([this.getWxConfig(), this.siteInfo()]).then(([config, info]) => {
+                this.Data({title: info.site_title})
+                this.wxConfig(config)
+                this.wxShare(info)
+            }).catch(error => {
+                console.log(error)
+            })
         }
     }
 </script>

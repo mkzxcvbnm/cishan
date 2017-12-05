@@ -19,7 +19,7 @@
                 <x-progress class="zz_list_progress" :percent="percent(item)" :show-cancel="false"></x-progress>
                 <div class="zz_list_info">
                     <div v-if="item.status == 1">
-                        <span>剩于时间：</span>
+                        <span>剩余时间：</span>
                         <clocker :time="dateFormat(item.end_time * 1000, 'YYYY-MM-DD HH:mm:ss')" @on-finish="item.status = 2">
                             <span>%H小时</span><span>%M分钟</span><span>%S秒</span>
                         </clocker>
@@ -49,7 +49,7 @@
                 return item.now_money / item.need_money * 100
             },
             link(item) {
-                this.$router.push({ name: 'zc', params: { id: item.id } })
+                this.$router.push({ name: 'zc', params: { id: item.id, tid: item.tid } })
             }
         }
     }

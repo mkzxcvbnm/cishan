@@ -20,7 +20,8 @@
         created() {
             this.get(this.api + 'api/index/Slide').then(res => {
                 let info = res.data.data.map((item, index) => ({
-                    img: item.image
+                    img: item.image,
+                    url: item.link
                 }))
                 this.$set(this, 'list', info)
             })

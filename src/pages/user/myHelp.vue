@@ -60,6 +60,7 @@
                             this.list.push(item)
                         })
                         if (!info.length || !this.params.limit || info.length < this.params.limit) {
+                            this.user.read_num = 0
                             this.params.page = false
                             this.data.scrollBox.getScrollBody().removeEventListener('scroll', this.scroll)
                             return false

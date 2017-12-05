@@ -5,13 +5,13 @@
         mode="out-in"
         appear
         >
-            <tabbar v-show="data.showFoot">
-                <tabbar-item :selected="to.path === '/'" link="/">
+            <tabbar v-show="data.showFoot" v-model="index">
+                <tabbar-item link="/">
                     <img slot="icon" src="~img/icon_nav1.png">
                     <img slot="icon-active" src="~img/icon_nav1a.png">
                     <span slot="label">首页</span>
                 </tabbar-item>
-                <tabbar-item :selected="to.path === '/news/2'" link="/news/2">
+                <tabbar-item link="/news/2">
                     <img slot="icon" src="~img/icon_nav2.png">
                     <img slot="icon-active" src="~img/icon_nav2a.png">
                     <span slot="label">动态</span>
@@ -20,12 +20,12 @@
                     <img slot="icon" src="~img/icon_navc.png">
                     <span slot="label">关注</span>
                 </tabbar-item>
-                <tabbar-item :selected="to.path === '/help'" link="/help">
+                <tabbar-item link="/help">
                     <img slot="icon" src="~img/icon_nav3.png">
                     <img slot="icon-active" src="~img/icon_nav3a.png">
                     <span slot="label">求助</span>
                 </tabbar-item>
-                <tabbar-item :selected="to.path === '/user'" link="/user">
+                <tabbar-item link="/user">
                     <img slot="icon" src="~img/icon_nav4.png">
                     <img slot="icon-active" src="~img/icon_nav4a.png">
                     <span slot="label">我的</span>
@@ -44,12 +44,24 @@
         },
         data() {
             return {
-                to: '/'
+                index: 0
             }
         },
         watch: {
             '$route' (to, from) {
-                this.$set(this, 'to', to)
+                this.$set(this, 'index', -1)
+                if (to.path === '/') {
+                    this.$set(this, 'index', 0)
+                }
+                if (to.path === '/news/2') {
+                    this.$set(this, 'index', 1)
+                }
+                if (to.path === '/help') {
+                    this.$set(this, 'index', 3)
+                }
+                if (to.path === '/user') {
+                    this.$set(this, 'index', 4)
+                }
             }
         }
     }

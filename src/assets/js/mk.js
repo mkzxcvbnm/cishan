@@ -4,15 +4,46 @@ import { mapState, mapActions } from 'vuex'
 const mk = {
     api: process.env.NODE_ENV === 'development' ? '' : '//api.jiujiu99.net/',
     transfer: new Vue(),
+    axios(config, count) {
+        return new Promise(function (resolve, reject) {
+            let axios = (config, count) => {
+                AjaxPlugin.$http(config).then(res => {
+                    resolve(res)
+                }).catch(error => {
+                    count = count ? count + 1 : 1
+                    if (count < 4) {
+                        Vue.$vux.toast.show({
+                            type: 'text',
+                            text: '请求失败，尝试重试第' + count + '次',
+                            position: 'bottom',
+                            width: '14rem',
+                            time: 3000,
+                            onHide() {
+                                axios(config, count)
+                            }
+                        })
+                    } else {
+                        Vue.$vux.toast.show({
+                            type: 'text',
+                            text: '请求失败',
+                            position: 'bottom'
+                        })
+                        reject(error)
+                    }
+                })
+            }
+            axios(config)
+        })
+    },
     post(url, data = {}) {
-        return AjaxPlugin.$http({
+        return mk.axios({
             method: 'post',
             url: url,
             data: data
         })
     },
     get(url, data = {}) {
-        return AjaxPlugin.$http({
+        return mk.axios({
             method: 'get',
             url: url,
             params: data
@@ -64,20 +95,57 @@ const mk = {
             jsApiCall(data)
         }
     },
-    wxConfig(data, callback) {
+    getWxConfig() {
+        return new Promise((resolve, reject) => {
+            this.get(this.api + 'api/jssdk/getSignPackage', {request_url: window.location.href.split('#')[0]}).then(res => {
+                let info = res.data.data
+                resolve(info)
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    },
+    wxConfig(config) {
         Vue.wechat.config({
-            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: data.appId, // 必填，公众号的唯一标识
-            timestamp: data.timeStamp, // 必填，生成签名的时间戳
-            nonceStr: data.nonceStr, // 必填，生成签名的随机串
-            signature: data.signature, // 必填，签名，见附录1
-            jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: config.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
+            timestamp: config.timestamp, // 必填，生成签名的时间戳
+            nonceStr: config.nonceStr, // 必填，生成签名的随机串
+            signature: config.signature, // 必填，签名，见附录1
+            jsApiList: [
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'onMenuShareWeibo',
+                'onMenuShareQZone'
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         })
-        Vue.wechat.ready(function() {
-            callback()
-        })
-        Vue.wechat.error(function(res) {
-            // console.log('wxConfig_error: ' + res)
+    },
+    wxShare(info) {
+        let publicInfo = {
+            title: info.site_indextitle,
+            imgUrl: 'http:' + info.site_indeximg
+        }
+        Vue.wechat.ready(() => {
+            Vue.wechat.onMenuShareTimeline({
+                ...publicInfo
+            })
+            Vue.wechat.onMenuShareAppMessage({
+                ...publicInfo,
+                desc: info.site_indexdesc
+            })
+            Vue.wechat.onMenuShareQQ({
+                ...publicInfo,
+                desc: info.site_indexdesc
+            })
+            Vue.wechat.onMenuShareWeibo({
+                ...publicInfo,
+                desc: info.site_indexdesc
+            })
+            Vue.wechat.onMenuShareQZone({
+                ...publicInfo,
+                desc: info.site_indexdesc
+            })
         })
     }
 }

@@ -115,19 +115,27 @@
                     })
                     return false
                 }
-                this.post(this.api + 'api/action/ApplyDz', {
+                this.post(this.api + 'api/action/jspay', {
                     openid: this.user.openid,
-                    uid: this.user.uid,
-                    name: this.user.nikename,
-                    mobile: this.user.mobile,
-                    type: this.type,
-                    begin_time: Math.round(new Date().getTime() / 1000),
-                    total_fee: this.money * 100
+                    body: ['', '拐杖短租', '爱心轮椅'][this.type],
+                    total_fee: this.money * 100,
+                    tid: this.type,
+                    ido: 'dz'
                 }).then(res => {
                     if (res.data.code === '0') {
-                        let info = JSON.parse(res.data.data)
+                        let info = res.data.data
                         this.wxPay(info, res => {
                             if (res.err_msg === 'get_brand_wcpay_request:ok') {
+                                this.post(this.api + 'api/action/ApplyDz', {
+                                    openid: this.user.openid,
+                                    uid: this.user.uid,
+                                    name: this.user.nikename,
+                                    mobile: this.user.mobile,
+                                    type: this.type,
+                                    begin_time: Math.round(new Date().getTime() / 1000),
+                                    total_fee: this.money * 100,
+                                    order_num: info.order_num
+                                })
                                 this.$vux.alert.show({
                                     title: '成功',
                                     content: '恭喜您，支付成功!更新可能会有延迟!',

@@ -3,7 +3,7 @@
         <div class="interval"></div>
         <div class="pbox3_list center_box bf">
             <div class="vux-form-preview weui-form-preview pbox3_list_item" v-for="(item, index) in list" :key="index">
-                <span class="type">赠送</span>
+                <span :class="{type: true, type_dz: item.classify === 1, type_zs: item.classify === 2}">{{['', '短租', '赠送'][item.classify]}}</span>
                 <div class="weui-form-preview__bd">
                     <div class="weui-form-preview__item">
                         <label class="weui-form-preview__label">申请产品：</label>
@@ -14,7 +14,9 @@
                         <span class="weui-form-preview__value">{{dateFormat(item.begin_time * 1000, 'YYYY年MM月DD日')}}</span>
                     </div>
                     <template v-if="item.classify === 1">
-                        <x-button class="mt10 mb10" type="primary" mini @click.native="return_payment(item)">退还轮椅（押金）</x-button>
+                        <x-button v-if="item.status === 0" class="mt10 mb10" type="primary" mini @click.native="return_payment(item)">退还轮椅（押金）</x-button>
+                        <span v-else-if="item.status === 1">处理中</span>
+                        <span v-else>已退还</span>
                     </template>
                     <template v-else>
                         <div class="weui-form-preview__item">
@@ -96,15 +98,13 @@
                     title: '通知',
                     content: '您确定退还' + this.love_type[this.$route.params.type] + '吗，工作人员收到您的反馈后会在5个工作日内处理',
                     onConfirm: function() {
-                        this.post(this.api + 'api/action/GiveBack', {uid: this.user.uid, id: item.id}).then(res => {
-                            let info = res.data.data
-                            if (info.code === '0') {
+                        this.post(this.api + 'api/action/GiveBack', {uid: this.user.uid, id: item.id, status: 1}).then(res => {
+                            // let info = res.data.data
+                            this.$set(item, 'status', 1)
+                            if (res.data.code === '0') {
                                 this.$vux.alert.show({
                                     title: '成功',
-                                    content: '退还成功',
-                                    onHide: function() {
-                                        this.$router.go(0)
-                                    }.bind(this)
+                                    content: '退还成功'
                                 })
                             } else {
                                 this.$vux.alert.show({
@@ -157,16 +157,22 @@
                 left: auto;
                 right: 5px;
                 top: 18px;
-                color: #ff5a00;
                 width: 60px;
                 height: 28px;
                 line-height: 28px;
                 text-align: center;
-                border: 1px solid #ff5a00;
                 border-radius: 3px;
                 font-size: 14px;
                 transform: rotate(36deg);
                 transform-origin: center;
+                &.type_dz {
+                    color: $color;
+                    border: 1px solid $color;
+                }
+                &.type_zs {
+                    color: #ff5a00;
+                    border: 1px solid #ff5a00;
+                }
             }
         }
         .pbox3_list_reply {
